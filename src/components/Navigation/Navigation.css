@@ -1,0 +1,25 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+
+    max-width: 900px;
+    margin: 1.5rem auto;
+    padding: 1rem 2rem;
+
+    background-color: var(--color-white);
+    border-radius: 999px;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--color-black);
+}
+
+nav a.active {
+    color: var(--color-mint-dark);
+}
