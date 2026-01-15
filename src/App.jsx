@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import Home from "./pages/Home/Home.jsx";
@@ -22,7 +19,7 @@ function App() {
           <Route path="/reizen" element={<TravelOverview />} />
           <Route path="/reizen/:travelId" element={<TravelDetail />} />
 
-          <Route path="/reserveren" element={<Booking />} />
+          <Route path="/reserveren:travelID" element={<Booking />} />
           <Route path="/profiel" element={<Profile />} />
 
           <Route path="/registreren" element={<SignUp />} />
