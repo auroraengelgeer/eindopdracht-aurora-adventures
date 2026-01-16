@@ -1,0 +1,39 @@
+.home-hero {
+    text-align: center;
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+}
+
+.home-title {
+    margin: 0 auto 1rem;
+    max-width: 780px;
+}
+
+.home-accent {
+    color: var(--color-orange-dark);
+}
+
+.home-subtitle {
+    margin: 0 auto 1.75rem;
+    max-width: 620px;
+    opacity: 0.9;
+}
+
+.home-cta {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.home-image-section {
+    margin-top: 2rem;
+}
+
+.home-image {
+    height: 360px;
+    border-radius: 18px;
+    background-image: url("../../assets/images/hero-image-3.jpg");
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+}
+
