@@ -9,6 +9,13 @@
     max-width: 780px;
 }
 
+.home-title,
+.home-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 .home-accent {
     color: var(--color-orange-dark);
 }
