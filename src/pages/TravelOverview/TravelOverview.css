@@ -1,0 +1,93 @@
+.travel-hero {
+    margin-bottom: 2rem;
+}
+
+.travel-controls {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.travel-search {
+    width: 100%;
+    max-width: 520px;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-grey-light);
+    background: var(--color-white);
+}
+
+.travel-tabs {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.tab {
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-grey-light);
+    background: var(--color-white);
+    cursor: pointer;
+}
+
+.tab-active {
+    border-color: var(--color-orange-dark);
+}
+
+.travel-section h2 {
+    margin-bottom: 1rem;
+}
+
+.travel-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.travel-card {
+    background: var(--color-white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.travel-card-image {
+    height: 140px;
+    background: var(--color-grey-light);
+}
+
+.travel-card-body {
+    padding: 1rem;
+}
+
+.travel-card-title {
+    margin-bottom: 0.25rem;
+}
+
+.travel-card-meta {
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+}
+
+.travel-card-price {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+/* Link styled as button */
+.travel-card .button {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.tab-active {
+    background-color: var(--color-orange);
+    color: white;
+}
+
+.travel-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
