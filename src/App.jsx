@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import Home from "./pages/Home/Home.jsx";
@@ -11,25 +8,36 @@ import Profile from "./pages/Profile/Profile.jsx";
 import SignIn from "./pages/SignIn/SignIn.jsx";
 import SignUp from "./pages/SignUp/SignUp.jsx";
 import TravelDetail from "./pages/TravelDetail/TravelDetail.jsx";
+import About from "./pages/About/About.jsx";
+import Faq from "./pages/Faq/Faq.jsx";
+import Layout from "./components/Navigation/Layout.jsx";
+
+
 
 
 function App() {
 
   return (
     <>
-      <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/reizen" element={<TravelOverview />} />
-          <Route path="/reizen/:travelId" element={<TravelDetail />} />
+        <Routes>
+            <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
 
-          <Route path="/reserveren" element={<Booking />} />
-          <Route path="/profiel" element={<Profile />} />
+                <Route path="reizen" element={<TravelOverview />} />
+                <Route path="reizen/:travelId" element={<TravelDetail />} />
 
-          <Route path="/registreren" element={<SignUp />} />
-          <Route path="/inloggen" element={<SignIn />} />
+                <Route path="reserveren/:travelId" element={<Booking />} />
+                <Route path="profiel" element={<Profile />} />
 
-          <Route path="*" element={<NotFound />} />
-      </Routes>
+                <Route path="registreren" element={<SignUp />} />
+                <Route path="inloggen" element={<SignIn />} />
+
+                <Route path="over-ons" element={<About />} />
+                <Route path="faq" element={<Faq />} />
+
+                <Route path="*" element={<NotFound />} />
+            </Route>
+        </Routes>
     </>
   )
 }
