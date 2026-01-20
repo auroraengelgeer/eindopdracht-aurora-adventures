@@ -26,7 +26,9 @@ function App() {
                 <Route path="reizen" element={<TravelOverview />} />
                 <Route path="reizen/:travelId" element={<TravelDetail />} />
 
+                <Route path="reserveren" element={<Booking />} />
                 <Route path="reserveren/:travelId" element={<Booking />} />
+
                 <Route path="profiel" element={<Profile />} />
 
                 <Route path="registreren" element={<SignUp />} />
