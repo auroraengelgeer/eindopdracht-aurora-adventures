@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Booking.css";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+
 import { dummyTravels } from "../../helpers/dummyTravels";
 
 
@@ -84,8 +85,18 @@ export default function Booking() {
 
             {isConfirmed && (
                 <div className="booking-success">
-                    <h2>Boeking bevestigd 🎉</h2>
+                    <h2>Boeking bevestigd!</h2>
                     <p>Je ontvangt binnen enkele minuten een bevestiging per e-mail.</p>
+
+                    <div className="success-actions">
+                        <Link to="/reizen" className="button button-primary">
+                            Bekijk meer reizen
+                        </Link>
+
+                        <Link to="/" className="button button-secondary">
+                            Terug naar home
+                        </Link>
+                    </div>
                 </div>
             )}
 
