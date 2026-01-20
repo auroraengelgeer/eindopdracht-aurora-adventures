@@ -29,6 +29,17 @@ export default function Booking() {
         setStep((prev) => Math.max(prev - 1, 1));
     }
 
+    const pricePerPerson = 1499;
+    const serviceFee = 25;
+
+    const subtotal = pricePerPerson * guests;
+    const total = subtotal + serviceFee;
+
+    const formatPrice = (amount) =>
+        new Intl.NumberFormat("nl-NL").format(amount);
+
+
+
     return (
         <div className="booking">
             <header className="booking-hero">
@@ -257,7 +268,19 @@ export default function Booking() {
                                 <button
                                     className="button button-primary"
                                     type="button"
-                                    onClick={() => setIsConfirmed(true)}
+                                    onClick={() => {
+                                        const bookingPayload = {
+                                            guests,
+                                            startDate,
+                                            contact: formData,
+                                            subtotal,
+                                            serviceFee,
+                                            total,
+                                        };
+
+                                        console.log("Booking payload:", bookingPayload);
+                                        setIsConfirmed(true);
+                                    }}
                                 >
                                     Boeking bevestigen
                                 </button>
@@ -273,17 +296,17 @@ export default function Booking() {
                     <p className="summary-sub">All-inclusive paradise with activities</p>
 
                     <div className="summary-row">
-                        <span>€1499 × {guests} gasten</span>
-                        <span>€2998</span>
+                        <span>€{pricePerPerson} × {guests} gasten</span>
+                        <span>€{formatPrice(subtotal)}</span>
                     </div>
                     <div className="summary-row">
                         <span>Servicekosten</span>
-                        <span>€25</span>
+                        <span>€{formatPrice(serviceFee)}</span>
                     </div>
 
                     <div className="summary-total">
                         <span>Totaal</span>
-                        <span>€3023</span>
+                        <span>€{formatPrice(total)}</span>
                     </div>
 
                     <div className="summary-safe">
