@@ -208,3 +208,13 @@
     margin: 1rem auto;
     max-width: 1000px;
 }
+
+.button-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--color-grey);
+}
+
+.button-primary:disabled:hover {
+    background-color: var(--color-grey);
+}

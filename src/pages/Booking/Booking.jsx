@@ -1,5 +1,8 @@
 import { useState } from "react";
 import "./Booking.css";
+import { useParams } from "react-router-dom";
+import { dummyTravels } from "../../helpers/dummyTravels";
+
 
 export default function Booking() {
     const [step, setStep] = useState(1);
@@ -18,6 +21,20 @@ export default function Booking() {
     const [guests, setGuests] = useState(2);
     const [isConfirmed, setIsConfirmed] = useState(false);
 
+    const [termsAccepted, setTermsAccepted] = useState(false);
+
+    const { travelId } = useParams();
+
+    const travel = dummyTravels.find((t) => String(t.id) === String(travelId));
+    if (!travel) {
+        return (
+            <div className="booking">
+                <h1>Boeking afronden</h1>
+                <p>Reis niet gevonden.</p>
+            </div>
+        );
+    }
+
 
 
 
@@ -29,7 +46,7 @@ export default function Booking() {
         setStep((prev) => Math.max(prev - 1, 1));
     }
 
-    const pricePerPerson = 1499;
+    const pricePerPerson = travel?.pricePerPerson || 0;
     const serviceFee = 25;
 
     const subtotal = pricePerPerson * guests;
@@ -40,15 +57,16 @@ export default function Booking() {
 
 
 
+
     return (
         <div className="booking">
             <header className="booking-hero">
                 <h1>Boeking afronden</h1>
-                <p className="booking-hero-sub">Tropical Beach Escape</p>
+                <p className="booking-hero-sub">{travel?.title}</p>
             </header>
 
             <div className="booking-steps">
-                <div className={`step ${step === 1 ? "step-active" : ""} ${step > 1 ? "step-done" : ""}`}>1</div>
+            <div className={`step ${step === 1 ? "step-active" : ""} ${step > 1 ? "step-done" : ""}`}>1</div>
                 <div className={`step-line ${step > 1 ? "step-line-active" : ""}`}/>
 
                 <div className={`step ${step === 2 ? "step-active" : ""} ${step > 2 ? "step-done" : ""}`}>2</div>
@@ -253,7 +271,12 @@ export default function Booking() {
                             </div>
 
                             <div className="checkbox-row">
-                                <input id="terms" type="checkbox"/>
+                                <input
+                                    id="terms"
+                                    type="checkbox"
+                                    checked={termsAccepted}
+                                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                                />
                                 <label htmlFor="terms">
                                     Ik ga akkoord met de <span className="linkish">algemene voorwaarden</span> en
                                     het{" "}
@@ -268,8 +291,10 @@ export default function Booking() {
                                 <button
                                     className="button button-primary"
                                     type="button"
+                                    disabled={!termsAccepted}
                                     onClick={() => {
                                         const bookingPayload = {
+                                            travelId,
                                             guests,
                                             startDate,
                                             contact: formData,
@@ -282,6 +307,7 @@ export default function Booking() {
                                         setIsConfirmed(true);
                                     }}
                                 >
+
                                     Boeking bevestigen
                                 </button>
 
@@ -290,33 +316,33 @@ export default function Booking() {
                     )}
                 </div>
 
-                <aside className="booking-summary-card">
-                    <div className="summary-image" aria-label="Reis afbeelding"/>
-                    <h3>Tropical Beach Escape</h3>
-                    <p className="summary-sub">All-inclusive paradise with activities</p>
+                    <aside className="booking-summary-card">
+                        <div className="summary-image" aria-label="Reis afbeelding"/>
+                        <h3>{travel?.title}</h3>
+                        <p className="summary-sub">All-inclusive paradise with activities</p>
 
-                    <div className="summary-row">
-                        <span>€{pricePerPerson} × {guests} gasten</span>
-                        <span>€{formatPrice(subtotal)}</span>
-                    </div>
-                    <div className="summary-row">
-                        <span>Servicekosten</span>
-                        <span>€{formatPrice(serviceFee)}</span>
-                    </div>
+                        <div className="summary-row">
+                            <span>€{pricePerPerson} × {guests} gasten</span>
+                            <span>€{formatPrice(subtotal)}</span>
+                        </div>
+                        <div className="summary-row">
+                            <span>Servicekosten</span>
+                            <span>€{formatPrice(serviceFee)}</span>
+                        </div>
 
-                    <div className="summary-total">
-                        <span>Totaal</span>
-                        <span>€{formatPrice(total)}</span>
-                    </div>
+                        <div className="summary-total">
+                            <span>Totaal</span>
+                            <span>€{formatPrice(total)}</span>
+                        </div>
 
-                    <div className="summary-safe">
-                        <span>✓</span>
-                        <p>
-                            <strong>Veilig betalen</strong><br/>
-                            Je gegevens zijn beschermd
-                        </p>
-                    </div>
-                </aside>
+                        <div className="summary-safe">
+                            <span>✓</span>
+                            <p>
+                                <strong>Veilig betalen</strong><br/>
+                                Je gegevens zijn beschermd
+                            </p>
+                        </div>
+                    </aside>
                 </section>
             )}
         </div>
