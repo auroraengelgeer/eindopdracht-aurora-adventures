@@ -1,11 +1,11 @@
 import "./Navigation.css";
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.jsx";
+import {NavLink} from "react-router-dom";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 
 export default function Navigation() {
 
-    const { isAuthenticated, logout } = useAuth();
+    const {isAuthenticated, logout} = useAuth();
 
     return (
         <nav>
@@ -19,7 +19,11 @@ export default function Navigation() {
             ) : (
                 <>
                     <NavLink to="/profiel">Profiel</NavLink>
-                    <button type="button" className="nav-logout" onClick={logout}>
+                    <button
+                        type="button"
+                        className="nav-logout"
+                        onClick={logout}
+                    >
                         Uitloggen
                     </button>
                 </>

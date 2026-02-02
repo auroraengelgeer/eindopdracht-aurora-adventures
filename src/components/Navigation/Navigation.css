@@ -25,14 +25,23 @@ nav a.active {
 }
 
 .nav-logout {
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    font: inherit;
+    background-color: var(--color-mint);
     color: var(--color-black);
-    padding: 0;
+    border: none;
+    border-radius: 999px; /* pill shape */
+    padding: 0.4rem 1rem;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .nav-logout:hover {
-    text-decoration: underline;
+    background-color: var(--color-mint-dark);
 }
+
+.nav-logout:active {
+    transform: scale(0.97);
+}
+
+
+
