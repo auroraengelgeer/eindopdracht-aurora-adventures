@@ -23,3 +23,16 @@ nav a {
 nav a.active {
     color: var(--color-mint-dark);
 }
+
+.nav-logout {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    color: var(--color-black);
+    padding: 0;
+}
+
+.nav-logout:hover {
+    text-decoration: underline;
+}

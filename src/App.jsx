@@ -11,6 +11,8 @@ import TravelDetail from "./pages/TravelDetail/TravelDetail.jsx";
 import About from "./pages/About/About.jsx";
 import Faq from "./pages/Faq/Faq.jsx";
 import Layout from "./components/Navigation/Layout.jsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
+
 
 
 
@@ -29,7 +31,15 @@ function App() {
                 <Route path="reserveren" element={<Booking />} />
                 <Route path="reserveren/:travelId" element={<Booking />} />
 
-                <Route path="profiel" element={<Profile />} />
+                <Route
+                    path="profiel"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+
 
                 <Route path="registreren" element={<SignUp />} />
                 <Route path="inloggen" element={<SignIn />} />
