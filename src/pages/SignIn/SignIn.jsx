@@ -18,7 +18,7 @@ export default function SignIn() {
         e.preventDefault();
 
         // demo login
-        login("demo-token");
+        login("demo-token", { email, firstName: "Demo", lastName: "User" });
         navigate(redirectTo);
     }
 
