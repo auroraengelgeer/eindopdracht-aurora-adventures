@@ -10,7 +10,9 @@
     position: relative;
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 }
+
 
 .auth-left::after {
     content: "";
@@ -28,11 +30,11 @@
     position: relative;
     z-index: 1;
     height: 100%;
-    padding: 4rem 3rem;
+    padding: 5rem 4rem;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 560px;
 }
 
 .auth-left-overlay h1 {

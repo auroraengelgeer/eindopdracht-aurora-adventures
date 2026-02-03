@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import heroImage from "../../assets/images/login-page-image.jpg";
 import "./SignUp.css";
+
 
 export default function SignUp() {
     const [firstName, setFirstName] = useState("");
@@ -24,10 +24,7 @@ export default function SignUp() {
     return (
         <div className="auth-page">
             {/* LINKS */}
-            <section
-                className="auth-left"
-                style={{ backgroundImage: `url(${heroImage})` }}
-            >
+            <section className="auth-left auth-left--signup">
                 <div className="auth-left-overlay">
                     <h1>Maak je account aan</h1>
                     <p>
