@@ -28,8 +28,14 @@ function App() {
                 <Route path="reizen" element={<TravelOverview />} />
                 <Route path="reizen/:travelId" element={<TravelDetail />} />
 
-                <Route path="reserveren" element={<Booking />} />
-                <Route path="reserveren/:travelId" element={<Booking />} />
+                <Route
+                    path="reserveren/:travelId"
+                    element={
+                        <ProtectedRoute>
+                            <Booking />
+                        </ProtectedRoute>
+                    }
+                />
 
                 <Route
                     path="profiel"
