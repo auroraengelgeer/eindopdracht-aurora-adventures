@@ -40,7 +40,6 @@ function App() {
                     }
                 />
 
-
                 <Route path="registreren" element={<SignUp />} />
                 <Route path="inloggen" element={<SignIn />} />
 

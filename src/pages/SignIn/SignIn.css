@@ -1,0 +1,84 @@
+.auth-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+    width: 100%;
+}
+
+/* LINKS: afbeelding */
+.auth-left {
+    position: relative;
+    background-image: url("../../assets/images/login-page-image.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* donkere overlay zoals in design */
+.auth-left::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.auth-left-overlay {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 5rem 4rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    color: white;
+}
+
+.auth-left-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.auth-left-text {
+    max-width: 42ch;
+    opacity: 0.95;
+}
+
+/* RECHTS: form */
+.auth-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 4rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 520px;
+}
+
+.auth-title {
+    color: var(--color-orange);
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.auth-form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.auth-bottom-text {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.auth-link {
+    color: var(--color-black);
+    text-decoration: underline;
+}

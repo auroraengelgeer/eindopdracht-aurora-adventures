@@ -1,14 +1,12 @@
 import "./Navigation.css";
-import {NavLink} from "react-router-dom";
-import {useAuth} from "../../context/AuthContext.jsx";
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 
-
-export default function Navigation() {
-
-    const {isAuthenticated, logout} = useAuth();
+export default function Navigation({ variant = "default" }) {
+    const { isAuthenticated, logout } = useAuth();
 
     return (
-        <nav>
+        <nav className={variant === "auth" ? "nav nav--auth" : "nav"}>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/reizen">Reizen</NavLink>
             <NavLink to="/over-ons">Over ons</NavLink>
@@ -19,16 +17,11 @@ export default function Navigation() {
             ) : (
                 <>
                     <NavLink to="/profiel">Profiel</NavLink>
-                    <button
-                        type="button"
-                        className="nav-logout"
-                        onClick={logout}
-                    >
+                    <button type="button" className="nav-logout" onClick={logout}>
                         Uitloggen
                     </button>
                 </>
             )}
-
         </nav>
     );
 }
