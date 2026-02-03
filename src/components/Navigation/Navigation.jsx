@@ -1,9 +1,13 @@
 import "./Navigation.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function Navigation({ variant = "default" }) {
+
     const { isAuthenticated, logout } = useAuth();
+
+    const navigate = useNavigate();
+
 
     return (
         <nav className={variant === "auth" ? "nav nav--auth" : "nav"}>
@@ -17,9 +21,17 @@ export default function Navigation({ variant = "default" }) {
             ) : (
                 <>
                     <NavLink to="/profiel">Profiel</NavLink>
-                    <button type="button" className="nav-logout" onClick={logout}>
+                    <button
+                        type="button"
+                        className="nav-logout"
+                        onClick={() => {
+                            logout();
+                            navigate("/inloggen", {replace: true});
+                        }}
+                    >
                         Uitloggen
                     </button>
+
                 </>
             )}
         </nav>

@@ -12,6 +12,8 @@ import About from "./pages/About/About.jsx";
 import Faq from "./pages/Faq/Faq.jsx";
 import Layout from "./components/Navigation/Layout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
+import PublicOnlyRoute from "./components/PublicOnlyRoute/PublicOnlyRoute.jsx";
+
 
 
 
@@ -46,8 +48,24 @@ function App() {
                     }
                 />
 
-                <Route path="registreren" element={<SignUp />} />
-                <Route path="inloggen" element={<SignIn />} />
+                <Route
+                    path="registreren"
+                    element={
+                        <PublicOnlyRoute>
+                            <SignUp />
+                        </PublicOnlyRoute>
+                    }
+                />
+
+                <Route
+                    path="inloggen"
+                    element={
+                        <PublicOnlyRoute>
+                            <SignIn />
+                        </PublicOnlyRoute>
+                    }
+                />
+
 
                 <Route path="over-ons" element={<About />} />
                 <Route path="faq" element={<Faq />} />
