@@ -1,0 +1,137 @@
+/* Copy van SignIn.css */
+.auth-page {
+    min-height: calc(100vh - 80px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--color-background);
+}
+
+.auth-left {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.auth-left::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            90deg,
+            rgba(17, 12, 6, 0.65) 0%,
+            rgba(17, 12, 6, 0.25) 70%,
+            rgba(17, 12, 6, 0.05) 100%
+    );
+}
+
+.auth-left-overlay {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 5rem 4rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-left-overlay h1 {
+    color: var(--color-white);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.auth-left-overlay p {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.auth-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.auth-form-wrapper {
+    width: 100%;
+    max-width: 520px;
+}
+
+.auth-title {
+    font-size: 3rem;
+    color: var(--color-orange-dark);
+    margin-bottom: 1.25rem;
+}
+
+.auth-form .field {
+    margin-bottom: 1rem;
+}
+
+.auth-form .field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.auth-form .field input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-grey-light);
+    background: var(--color-white);
+    font: inherit;
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.9rem 1.75rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+.auth-bottom-text {
+    margin-top: 1.5rem;
+    text-align: center;
+    opacity: 0.9;
+}
+
+.auth-link {
+    color: var(--color-black);
+    text-decoration: underline;
+}
+
+/* EXTRA: 2 kolommen voor naamvelden */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .auth-page {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .auth-left {
+        min-height: 320px;
+    }
+
+    .auth-left-overlay {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 2.25rem;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}

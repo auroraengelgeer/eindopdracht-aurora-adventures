@@ -23,3 +23,34 @@ nav a {
 nav a.active {
     color: var(--color-mint-dark);
 }
+
+.nav-logout {
+    background-color: var(--color-mint);
+    color: var(--color-black);
+    border: none;
+    border-radius: 999px; /* pill shape */
+    padding: 0.4rem 1rem;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.nav-logout:hover {
+    background-color: var(--color-mint-dark);
+}
+
+.nav-logout:active {
+    transform: scale(0.97);
+}
+
+.nav--auth {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+
+    width: min(900px, calc(100% - 48px));
+    margin: 0; /* belangrijk: geen ruimte reserveren */
+}
+
