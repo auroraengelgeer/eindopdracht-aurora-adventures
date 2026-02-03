@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "./SignIn.css";
 
@@ -10,12 +10,16 @@ export default function SignIn() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
+    const location = useLocation();
+    const redirectTo = location.state?.from?.pathname || "/profiel";
+
+
     function handleSubmit(e) {
         e.preventDefault();
 
         // demo login
         login("demo-token");
-        navigate("/profiel");
+        navigate(redirectTo);
     }
 
     return (
