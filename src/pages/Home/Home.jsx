@@ -16,7 +16,7 @@ export default function Home() {
                 </p>
 
                 <Link className="button button-secondary home-cta" to="/reizen">
-                    Boek nu
+                    Bekijk reizen
                 </Link>
             </header>
 

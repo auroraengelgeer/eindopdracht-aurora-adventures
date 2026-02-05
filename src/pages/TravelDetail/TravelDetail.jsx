@@ -1,10 +1,10 @@
 import { Link, useParams } from "react-router-dom";
-import { useTravels } from "../../hooks/useTravels";
+import { useTravel } from "../../hooks/useTravel";
 import "./TravelDetail.css";
 
 export default function TravelDetail() {
     const { travelId } = useParams();
-    const { travels, loading, error } = useTravels();
+    const { travel, loading, error } = useTravel(travelId);
 
     if (loading) {
         return (
@@ -25,8 +25,6 @@ export default function TravelDetail() {
         );
     }
 
-    const travel = travels.find((t) => String(t.id) === String(travelId));
-
     if (!travel) {
         return (
             <div className="travel-detail">
@@ -41,7 +39,9 @@ export default function TravelDetail() {
     return (
         <div className="travel-detail">
             <header className="travel-detail-hero">
-                <Link className="back-link" to="/reizen">← Terug naar overzicht</Link>
+                <Link className="back-link" to="/reizen">
+                    ← Terug naar overzicht
+                </Link>
             </header>
 
             <section className="travel-detail-content">
