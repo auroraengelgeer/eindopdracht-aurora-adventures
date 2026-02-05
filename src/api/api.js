@@ -15,6 +15,6 @@ export async function apiFetch(endpoint, options = {}) {
         console.error("API error:", response.status, response.statusText, errorText);
         throw new Error(`API ${response.status}: ${errorText || response.statusText}`);
     }
-
+    // to do : voeg nog een error message voor klant toe in return error message.
     return response.json();
 }
