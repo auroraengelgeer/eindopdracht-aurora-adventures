@@ -17,7 +17,7 @@ export default function SignUp() {
         e.preventDefault();
 
         // registratie = direct ingelogd
-        login("demo-token");
+        login("demo-token", { email, firstName, lastName });
         navigate("/profiel");
     }
 

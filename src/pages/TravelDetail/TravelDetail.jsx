@@ -1,11 +1,31 @@
 import { Link, useParams } from "react-router-dom";
-import { dummyTravels } from "../../helpers/dummyTravels.js";
+import { useTravels } from "../../hooks/useTravels";
 import "./TravelDetail.css";
 
 export default function TravelDetail() {
     const { travelId } = useParams();
+    const { travels, loading, error } = useTravels();
 
-    const travel = dummyTravels.find((t) => t.id === travelId);
+    if (loading) {
+        return (
+            <div className="travel-detail">
+                <p>Reis laden...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="travel-detail">
+                <p>{error}</p>
+                <Link to="/reizen" className="button button-secondary">
+                    Terug naar overzicht
+                </Link>
+            </div>
+        );
+    }
+
+    const travel = travels.find((t) => String(t.id) === String(travelId));
 
     if (!travel) {
         return (
@@ -47,7 +67,7 @@ export default function TravelDetail() {
                     <div className="travel-detail-card">
                         <h2>Hoogtepunten</h2>
                         <ul className="travel-list">
-                            {travel.highlights.map((h) => (
+                            {travel.highlights?.map((h) => (
                                 <li key={h}>{h}</li>
                             ))}
                         </ul>
@@ -56,7 +76,7 @@ export default function TravelDetail() {
                     <div className="travel-detail-card">
                         <h2>Inclusief</h2>
                         <ul className="travel-list">
-                            {travel.included.map((i) => (
+                            {travel.included?.map((i) => (
                                 <li key={i}>{i}</li>
                             ))}
                         </ul>
@@ -68,21 +88,7 @@ export default function TravelDetail() {
                         <p className="booking-price">€{travel.pricePerPerson}</p>
                         <p className="booking-sub">per persoon</p>
 
-                        <div className="booking-row">
-                            <label htmlFor="date">Vertrekdatum</label>
-                            <input id="date" type="date" />
-                        </div>
-
-                        <div className="booking-row">
-                            <label>Aantal gasten</label>
-                            <div className="guests">
-                                <button type="button" className="guest-btn">-</button>
-                                <span>2 gasten</span>
-                                <button type="button" className="guest-btn">+</button>
-                            </div>
-                        </div>
-
-                        <Link className="button button-primary booking-cta" to="/reserveren">
+                        <Link className="button button-primary booking-cta" to={`/reserveren/${travel.id}`}>
                             Boek nu
                         </Link>
 
