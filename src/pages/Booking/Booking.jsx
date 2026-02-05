@@ -56,6 +56,17 @@ export default function Booking() {
     const formatPrice = (amount) =>
         new Intl.NumberFormat("nl-NL").format(amount);
 
+    function saveBookingToStorage(booking) {
+        const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
+        existing.push(booking);
+        localStorage.setItem("bookings", JSON.stringify(existing));
+    }
+
+    function generateBookingId() {
+        return `BK-${Date.now()}`;
+    }
+
+
 
 
 
@@ -305,16 +316,22 @@ export default function Booking() {
                                     disabled={!termsAccepted}
                                     onClick={() => {
                                         const bookingPayload = {
+                                            id: generateBookingId(),
+                                            createdAt: new Date().toISOString(),
                                             travelId,
+                                            travelTitle: travel?.title || "Onbekende reis",
                                             guests,
                                             startDate,
                                             contact: formData,
                                             subtotal,
                                             serviceFee,
                                             total,
+                                            userEmail: formData.email, // voor nu: koppelen op email uit formulier
                                         };
 
                                         console.log("Booking payload:", bookingPayload);
+
+                                        saveBookingToStorage(bookingPayload);
                                         setIsConfirmed(true);
                                     }}
                                 >
