@@ -52,6 +52,19 @@ export default function Profile() {
                 <div className="profile-card">
                     <h2>Mijn boekingen</h2>
 
+    {/*optioneel:*/}
+                    {/*<button*/}
+                    {/*    className="button button-secondary"*/}
+                    {/*    type="button"*/}
+                    {/*    onClick={() => {*/}
+                    {/*        localStorage.removeItem("bookings");*/}
+                    {/*        setBookings([]);*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    Boekingen wissen (test)*/}
+                    {/*</button>*/}
+
+
                     {myBookings.length === 0 ? (
                         <div className="profile-empty">
                             <p>Je hebt nog geen boekingen.</p>

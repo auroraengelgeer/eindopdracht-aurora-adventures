@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Booking.css";
 import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useTravels } from "../../hooks/useTravels";
 
-import { dummyTravels } from "../../helpers/dummyTravels";
 
 
 export default function Booking() {
@@ -25,18 +26,56 @@ export default function Booking() {
     const [termsAccepted, setTermsAccepted] = useState(false);
 
     const { travelId } = useParams();
+    const { user } = useAuth();
 
-    const travel = dummyTravels.find((t) => String(t.id) === String(travelId));
+    useEffect(() => {
+        if (!user) return;
+
+        setFormData((prev) => ({
+            ...prev,
+            email: user.email || prev.email,
+            firstName: user.firstName || prev.firstName,
+            lastName: user.lastName || prev.lastName,
+        }));
+    }, [user]);
+
+
+    const { travels, loading, error } = useTravels();
+
+    const travel = travels.find((t) => String(t.id) === String(travelId));
+
+    if (loading) {
+        return (
+            <div className="booking">
+                <h1>Boeking afronden</h1>
+                <p>Reis laden...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="booking">
+                <h1>Boeking afronden</h1>
+                <p>{error}</p>
+                <Link to="/reizen" className="button button-secondary">
+                    Terug naar reizen
+                </Link>
+            </div>
+        );
+    }
+
     if (!travel) {
         return (
             <div className="booking">
                 <h1>Boeking afronden</h1>
                 <p>Reis niet gevonden.</p>
+                <Link to="/reizen" className="button button-secondary">
+                    Terug naar reizen
+                </Link>
             </div>
         );
     }
-
-
 
 
     function nextStep() {
@@ -65,9 +104,6 @@ export default function Booking() {
     function generateBookingId() {
         return `BK-${Date.now()}`;
     }
-
-
-
 
 
     return (
@@ -326,7 +362,7 @@ export default function Booking() {
                                             subtotal,
                                             serviceFee,
                                             total,
-                                            userEmail: formData.email, // voor nu: koppelen op email uit formulier
+                                            userEmail: user?.email || formData.email,
                                         };
 
                                         console.log("Booking payload:", bookingPayload);
