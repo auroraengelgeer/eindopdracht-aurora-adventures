@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Booking.css";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useTravels } from "../../hooks/useTravels";
 
@@ -20,13 +20,18 @@ export default function Booking() {
     });
 
     const [startDate, setStartDate] = useState("");
-    const [guests, setGuests] = useState(2);
     const [isConfirmed, setIsConfirmed] = useState(false);
 
     const [termsAccepted, setTermsAccepted] = useState(false);
 
     const { travelId } = useParams();
     const { user } = useAuth();
+
+    const location = useLocation();
+    const initialGuests = Number(location.state?.guests) || 2;
+
+    const [guests, setGuests] = useState(initialGuests);
+
 
     useEffect(() => {
         if (!user) return;
@@ -103,6 +108,20 @@ export default function Booking() {
 
     function generateBookingId() {
         return `BK-${Date.now()}`;
+    }
+
+    function getSummarySubtitle(travel) {
+        if (!travel) return "";
+
+        if (travel.category === "tour") {
+            return `${travel.durationDays} dag activiteit`;
+        }
+
+        if (travel.category === "package") {
+            return "Vakantiepakket inclusief verblijf";
+        }
+
+        return travel.shortDescription || "";
     }
 
 
@@ -383,7 +402,7 @@ export default function Booking() {
                     <aside className="booking-summary-card">
                         <div className="summary-image" aria-label="Reis afbeelding"/>
                         <h3>{travel?.title}</h3>
-                        <p className="summary-sub">All-inclusive paradise with activities</p>
+                        <p className="summary-sub">{getSummarySubtitle(travel)}</p>
 
                         <div className="summary-row">
                             <span>€{pricePerPerson} × {guests} gasten</span>
