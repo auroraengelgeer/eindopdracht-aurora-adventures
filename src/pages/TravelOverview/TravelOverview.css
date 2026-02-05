@@ -91,3 +91,22 @@
 .travel-grid {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
+
+/* --- FIX: CTA knop altijd onderaan in elke card --- */
+.travel-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.travel-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* jouw Link-button */
+.travel-card .button {
+    margin-top: auto;          /* duwt knop naar onder */
+    align-self: flex-start;    /* houdt knop links (pilvorm) */
+}
