@@ -110,3 +110,7 @@
     margin-top: auto;          /* duwt knop naar onder */
     align-self: flex-start;    /* houdt knop links (pilvorm) */
 }
+
+.travel-card-title {
+    min-height: 3.2rem; /* ongeveer 2 regels titel */
+}
