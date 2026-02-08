@@ -82,3 +82,12 @@
     opacity: 0.7;
     font-size: 0.85rem;
 }
+
+.profile-booking {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.profile-booking:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}

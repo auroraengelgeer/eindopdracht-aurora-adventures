@@ -10,7 +10,7 @@ import SignUp from "./pages/SignUp/SignUp.jsx";
 import TravelDetail from "./pages/TravelDetail/TravelDetail.jsx";
 import About from "./pages/About/About.jsx";
 import Faq from "./pages/Faq/Faq.jsx";
-import Layout from "./components/Navigation/Layout.jsx";
+import Layout from "./Layout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import PublicOnlyRoute from "./components/PublicOnlyRoute/PublicOnlyRoute.jsx";
 import { useAutoLogout } from "./hooks/useAutoLogout";
