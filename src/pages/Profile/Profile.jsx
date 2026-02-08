@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useEffect, useMemo, useState } from "react";
 import { getBookings } from "../../api/bookings";
+import { isJwtToken } from "../../helpers/isJwtToken";
 import "./Profile.css";
 
 export default function Profile() {
@@ -10,12 +11,12 @@ export default function Profile() {
 
     const [bookings, setBookings] = useState([]);
 
-    useEffect(() => {
-        if (!token) return;
 
+    useEffect(() => {
         async function fetchBookings() {
             try {
-                const data = await getBookings(token);
+                const jwt = isJwtToken(token) ? token : "";
+                const data = await getBookings(jwt);
                 setBookings(Array.isArray(data) ? data : []);
             } catch (e) {
                 console.error("Bookings ophalen mislukt:", e);
@@ -27,10 +28,14 @@ export default function Profile() {
     }, [token]);
 
 
+
     const myBookings = useMemo(() => {
         if (!user?.email) return [];
         return bookings.filter((b) => b.userEmail === user.email);
     }, [bookings, user?.email]);
+
+
+
 
     return (
         <div className="profile">

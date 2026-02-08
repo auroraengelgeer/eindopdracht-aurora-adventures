@@ -3,6 +3,7 @@ import { useParams, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useTravels } from "../../hooks/useTravels";
 import { createBooking } from "../../api/bookings";
+import { isJwtToken } from "../../helpers/isJwtToken";
 import "./Booking.css";
 
 
@@ -113,8 +114,9 @@ export default function Booking() {
 
 
     function generateBookingId() {
-        return `BK-${Date.now()}`;
+        return Date.now(); // number
     }
+
 
     function getSummarySubtitle(travel) {
         if (!travel) return "";
@@ -378,22 +380,34 @@ export default function Booking() {
                                     onClick={async () => {
                                         try {
                                             const bookingPayload = {
-                                                id: generateBookingId(),
+                                                id: generateBookingId(), // number (Date.now)
                                                 createdAt: new Date().toISOString(),
+
                                                 travelId: Number(travelId),
                                                 travelTitle: travel?.title || "Onbekende reis",
+
                                                 guests,
                                                 startDate,
-                                                contact: formData,
+
+                                                // contactgegevens plat opslaan (zoals schema)
+                                                firstName: formData.firstName,
+                                                lastName: formData.lastName,
+                                                email: formData.email,
+                                                phone: formData.phone,
+                                                address: formData.address,
+                                                city: formData.city,
+                                                postalCode: formData.postalCode,
+
                                                 subtotal,
                                                 serviceFee,
                                                 total,
+
+                                                // koppeling aan ingelogde user (voor nu via email)
                                                 userEmail: user?.email || formData.email,
                                             };
 
-                                            console.log("Booking payload:", bookingPayload);
-
-                                            await createBooking(bookingPayload, token);
+                                            const jwt = isJwtToken(token) ? token : "";
+                                            await createBooking(bookingPayload, jwt);
 
                                             setIsConfirmed(true);
                                         } catch (e) {
@@ -401,6 +415,7 @@ export default function Booking() {
                                             alert("Boeking opslaan lukt nu niet. Probeer opnieuw.");
                                         }
                                     }}
+
                                 >
 
                                     Boeking bevestigen

@@ -1,15 +1,28 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const PROJECT_ID = import.meta.env.VITE_NOVI_PROJECT_ID;
 
-export async function apiFetch(endpoint, options = {}, token) {
+if (!BASE_URL) {
+    console.warn("VITE_API_BASE_URL ontbreekt in .env");
+}
+if (!PROJECT_ID) {
+    console.warn("VITE_NOVI_PROJECT_ID ontbreekt in .env");
+}
+
+export async function apiFetch(endpoint, options = {}, token = "") {
+    const headers = {
+        "Content-Type": "application/json",
+        "novi-education-project-id": PROJECT_ID,
+        ...(options.headers || {}),
+    };
+
+    // Alleen Authorization meesturen als je écht een token hebt
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${BASE_URL}${endpoint}`, {
         ...options,
-        headers: {
-            "Content-Type": "application/json",
-            "novi-education-project-id": PROJECT_ID,
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            ...(options.headers || {}),
-        },
+        headers,
     });
 
     if (!response.ok) {
@@ -18,5 +31,7 @@ export async function apiFetch(endpoint, options = {}, token) {
         throw new Error(`API ${response.status}: ${errorText || response.statusText}`);
     }
 
-    return response.json();
+    // sommige endpoints kunnen empty body teruggeven
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
 }

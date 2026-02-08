@@ -7,19 +7,23 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { login } = useAuth();
+    const { loginWithCredentials } = useAuth();
     const navigate = useNavigate();
 
     const location = useLocation();
     const redirectTo = location.state?.from?.pathname || "/profiel";
 
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        // demo login
-        login("demo-token", { email, firstName: "Demo", lastName: "User" });
-        navigate(redirectTo);
+        try {
+            await loginWithCredentials(email, password);
+            navigate(redirectTo);
+        } catch (err) {
+            console.error("Login failed:", err);
+            alert("Inloggen mislukt. Controleer je gegevens.");
+        }
     }
 
     return (
