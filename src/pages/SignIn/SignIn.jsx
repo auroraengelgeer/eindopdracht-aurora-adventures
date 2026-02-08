@@ -7,19 +7,24 @@ export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { login } = useAuth();
+    const { loginWithCredentials } = useAuth();
     const navigate = useNavigate();
 
     const location = useLocation();
+    const expired = Boolean(location.state?.expired);
     const redirectTo = location.state?.from?.pathname || "/profiel";
 
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        // demo login
-        login("demo-token", { email, firstName: "Demo", lastName: "User" });
-        navigate(redirectTo);
+        try {
+            await loginWithCredentials(email, password);
+            navigate(redirectTo, { replace: true });
+        } catch (err) {
+            console.error("Login failed:", err);
+            alert("Inloggen mislukt. Controleer je gegevens.");
+        }
     }
 
     return (
@@ -39,6 +44,13 @@ export default function SignIn() {
             <section className="auth-right">
                 <div className="auth-card">
                     <h2 className="auth-title">Log in</h2>
+
+                    {expired && (
+                        <div className="auth-alert">
+                            Je sessie is verlopen. Log opnieuw in.
+                        </div>
+                    )}
+
 
                     <form className="auth-form" onSubmit={handleSubmit}>
                         <div className="field">

@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useTravels } from "../../hooks/useTravels";
+import { createBooking } from "../../api/bookings";
+import { isJwtToken } from "../../helpers/isJwtToken";
 import "./Booking.css";
-import { useParams, Link } from "react-router-dom";
 
-import { dummyTravels } from "../../helpers/dummyTravels";
 
 
 export default function Booking() {
@@ -19,24 +22,77 @@ export default function Booking() {
     });
 
     const [startDate, setStartDate] = useState("");
-    const [guests, setGuests] = useState(2);
     const [isConfirmed, setIsConfirmed] = useState(false);
 
     const [termsAccepted, setTermsAccepted] = useState(false);
 
     const { travelId } = useParams();
+    const { user, token } = useAuth();
 
-    const travel = dummyTravels.find((t) => String(t.id) === String(travelId));
+    const location = useLocation();
+    const initialGuests = Number(location.state?.guests) || 2;
+
+    const [guests, setGuests] = useState(initialGuests);
+
+
+    useEffect(() => {
+        if (!user) return;
+
+        setFormData((prev) => {
+            const next = {
+                ...prev,
+                email: user.email || prev.email,
+                firstName: user.firstName || prev.firstName,
+                lastName: user.lastName || prev.lastName,
+            };
+
+            const changed =
+                next.email !== prev.email ||
+                next.firstName !== prev.firstName ||
+                next.lastName !== prev.lastName;
+
+            return changed ? next : prev;
+        });
+    }, [user?.email, user?.firstName, user?.lastName]);
+
+
+
+    const { travels, loading, error } = useTravels();
+
+    const travel = travels.find((t) => String(t.id) === String(travelId));
+
+    if (loading) {
+        return (
+            <div className="booking">
+                <h1>Boeking afronden</h1>
+                <p>Reis laden...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="booking">
+                <h1>Boeking afronden</h1>
+                <p>{error}</p>
+                <Link to="/reizen" className="button button-secondary">
+                    Terug naar reizen
+                </Link>
+            </div>
+        );
+    }
+
     if (!travel) {
         return (
             <div className="booking">
                 <h1>Boeking afronden</h1>
                 <p>Reis niet gevonden.</p>
+                <Link to="/reizen" className="button button-secondary">
+                    Terug naar reizen
+                </Link>
             </div>
         );
     }
-
-
 
 
     function nextStep() {
@@ -57,6 +113,24 @@ export default function Booking() {
         new Intl.NumberFormat("nl-NL").format(amount);
 
 
+    function generateBookingId() {
+        return Date.now(); // number
+    }
+
+
+    function getSummarySubtitle(travel) {
+        if (!travel) return "";
+
+        if (travel.category === "tour") {
+            return `${travel.durationDays} dag activiteit`;
+        }
+
+        if (travel.category === "package") {
+            return "Vakantiepakket inclusief verblijf";
+        }
+
+        return travel.shortDescription || "";
+    }
 
 
     return (
@@ -303,20 +377,45 @@ export default function Booking() {
                                     className="button button-primary"
                                     type="button"
                                     disabled={!termsAccepted}
-                                    onClick={() => {
-                                        const bookingPayload = {
-                                            travelId,
-                                            guests,
-                                            startDate,
-                                            contact: formData,
-                                            subtotal,
-                                            serviceFee,
-                                            total,
-                                        };
+                                    onClick={async () => {
+                                        try {
+                                            const bookingPayload = {
+                                                id: generateBookingId(), // number (Date.now)
+                                                createdAt: new Date().toISOString(),
 
-                                        console.log("Booking payload:", bookingPayload);
-                                        setIsConfirmed(true);
+                                                travelId: Number(travelId),
+                                                travelTitle: travel?.title || "Onbekende reis",
+
+                                                guests,
+                                                startDate,
+
+                                                // contactgegevens plat opslaan (zoals schema)
+                                                firstName: formData.firstName,
+                                                lastName: formData.lastName,
+                                                email: formData.email,
+                                                phone: formData.phone,
+                                                address: formData.address,
+                                                city: formData.city,
+                                                postalCode: formData.postalCode,
+
+                                                subtotal,
+                                                serviceFee,
+                                                total,
+
+                                                // koppeling aan ingelogde user (voor nu via email)
+                                                userEmail: user?.email || formData.email,
+                                            };
+
+                                            const jwt = isJwtToken(token) ? token : "";
+                                            await createBooking(bookingPayload, jwt);
+
+                                            setIsConfirmed(true);
+                                        } catch (e) {
+                                            console.error("Booking POST failed:", e);
+                                            alert("Boeking opslaan lukt nu niet. Probeer opnieuw.");
+                                        }
                                     }}
+
                                 >
 
                                     Boeking bevestigen
@@ -330,7 +429,7 @@ export default function Booking() {
                     <aside className="booking-summary-card">
                         <div className="summary-image" aria-label="Reis afbeelding"/>
                         <h3>{travel?.title}</h3>
-                        <p className="summary-sub">All-inclusive paradise with activities</p>
+                        <p className="summary-sub">{getSummarySubtitle(travel)}</p>
 
                         <div className="summary-row">
                             <span>€{pricePerPerson} × {guests} gasten</span>

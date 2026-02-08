@@ -1,10 +1,13 @@
 import { Link, useParams } from "react-router-dom";
 import { useTravel } from "../../hooks/useTravel";
+import { useState } from "react";
 import "./TravelDetail.css";
+
 
 export default function TravelDetail() {
     const { travelId } = useParams();
     const { travel, loading, error } = useTravel(travelId);
+    const [guests, setGuests] = useState(2);
 
     if (loading) {
         return (
@@ -88,9 +91,38 @@ export default function TravelDetail() {
                         <p className="booking-price">€{travel.pricePerPerson}</p>
                         <p className="booking-sub">per persoon</p>
 
-                        <Link className="button button-primary booking-cta" to={`/reserveren/${travel.id}`}>
+                        <div className="booking-guests">
+                            <p className="booking-guests-label">Aantal gasten</p>
+
+                            <div className="guest-row">
+                                <button
+                                    type="button"
+                                    className="guest-btn"
+                                    onClick={() => setGuests((g) => Math.max(1, g - 1))}
+                                >
+                                    -
+                                </button>
+
+                                <span className="guest-count">{guests}</span>
+
+                                <button
+                                    type="button"
+                                    className="guest-btn"
+                                    onClick={() => setGuests((g) => g + 1)}
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        <Link
+                            className="button button-primary booking-cta"
+                            to={`/reserveren/${travel.id}`}
+                            state={{ guests }}
+                        >
                             Boek nu
                         </Link>
+
 
                         <p className="booking-note">Je wordt pas in rekening gebracht na bevestiging.</p>
                     </div>
