@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "./SignIn.css";
@@ -6,13 +6,37 @@ import "./SignIn.css";
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showSignupSuccess, setShowSignupSuccess] = useState(false);
+
 
     const { loginWithCredentials } = useAuth();
     const navigate = useNavigate();
 
     const location = useLocation();
+
     const expired = Boolean(location.state?.expired);
+    const signupEmail = location.state?.email || "";
+
+
     const redirectTo = location.state?.from?.pathname || "/profiel";
+
+    useEffect(() => {
+        const signupSuccess = Boolean(location.state?.signupSuccess);
+
+        if (signupSuccess) {
+            setShowSignupSuccess(true);
+
+            if (signupEmail) {
+                setEmail(signupEmail);
+            }
+
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+
+        if (expired) {
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [expired, signupEmail, navigate, location.pathname, location.state]);
 
 
     async function handleSubmit(e) {
@@ -50,6 +74,15 @@ export default function SignIn() {
                             Je sessie is verlopen. Log opnieuw in.
                         </div>
                     )}
+
+                    {showSignupSuccess && (
+                        <div className="auth-alert auth-alert--success">
+                            Je registratie is ontvangen. Gebruik een demo account om in te loggen.
+                            <br />
+                            Demo gebruiker: <code>user@auroraadventures.nl</code> — Wachtwoord: <code>User123!</code>
+                        </div>
+                    )}
+
 
 
                     <form className="auth-form" onSubmit={handleSubmit}>

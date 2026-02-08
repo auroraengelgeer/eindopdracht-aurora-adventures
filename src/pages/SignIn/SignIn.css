@@ -89,3 +89,24 @@
     margin-bottom: 1rem;
     font-weight: 500;
 }
+
+.auth-info {
+    background: #f6f1ea;
+    border: 1px solid #e4d8c8;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    color: #5a4a3c;
+}
+
+.auth-info-small {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.auth-info code {
+    background: #fff;
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+}

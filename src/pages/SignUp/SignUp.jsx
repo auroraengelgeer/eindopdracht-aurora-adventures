@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { createProfile } from "../../api/profiles";
 import "./SignUp.css";
 
 
@@ -10,16 +10,38 @@ export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const { login } = useAuth();
-    const navigate = useNavigate();
 
-    function handleSubmit(e) {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const showInfo = Boolean(location.state?.showDemoInfo);
+
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        // registratie = direct ingelogd
-        login("demo-token", { email, firstName, lastName });
-        navigate("/profiel");
+        try {
+            const profilePayload = {
+                id: Date.now(),
+                firstName,
+                lastName,
+                email,
+                createdAt: new Date().toISOString(),
+            };
+
+            await createProfile(profilePayload);
+
+            // ✅ ga naar login met succesmelding + email prefill
+            navigate("/inloggen", {
+                replace: true,
+                state: { signupSuccess: true, email },
+            });
+        } catch (err) {
+            console.error("Signup failed:", err);
+            alert("Registreren mislukt. Probeer opnieuw.");
+        }
     }
+
+
 
     return (
         <div className="auth-page">
