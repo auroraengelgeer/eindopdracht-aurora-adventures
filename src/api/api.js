@@ -1,11 +1,13 @@
-const BASE_URL = "https://novi-backend-api-wgsgz.ondigitalocean.app";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const PROJECT_ID = import.meta.env.VITE_NOVI_PROJECT_ID;
 
-export async function apiFetch(endpoint, options = {}) {
+export async function apiFetch(endpoint, options = {}, token) {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
         ...options,
         headers: {
             "Content-Type": "application/json",
-            "novi-education-project-id": "e8f5301b-5b8b-4f17-af36-2a6073dc22da",
+            "novi-education-project-id": PROJECT_ID,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...(options.headers || {}),
         },
     });
@@ -15,6 +17,6 @@ export async function apiFetch(endpoint, options = {}) {
         console.error("API error:", response.status, response.statusText, errorText);
         throw new Error(`API ${response.status}: ${errorText || response.statusText}`);
     }
-    // to do : voeg nog een error message voor klant toe in return error message.
+
     return response.json();
 }

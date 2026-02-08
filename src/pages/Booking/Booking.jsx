@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import "./Booking.css";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useTravels } from "../../hooks/useTravels";
+import { createBooking } from "../../api/bookings";
+import "./Booking.css";
 
 
 
@@ -25,7 +26,7 @@ export default function Booking() {
     const [termsAccepted, setTermsAccepted] = useState(false);
 
     const { travelId } = useParams();
-    const { user } = useAuth();
+    const { user, token } = useAuth();
 
     const location = useLocation();
     const initialGuests = Number(location.state?.guests) || 2;
@@ -36,13 +37,23 @@ export default function Booking() {
     useEffect(() => {
         if (!user) return;
 
-        setFormData((prev) => ({
-            ...prev,
-            email: user.email || prev.email,
-            firstName: user.firstName || prev.firstName,
-            lastName: user.lastName || prev.lastName,
-        }));
-    }, [user]);
+        setFormData((prev) => {
+            const next = {
+                ...prev,
+                email: user.email || prev.email,
+                firstName: user.firstName || prev.firstName,
+                lastName: user.lastName || prev.lastName,
+            };
+
+            const changed =
+                next.email !== prev.email ||
+                next.firstName !== prev.firstName ||
+                next.lastName !== prev.lastName;
+
+            return changed ? next : prev;
+        });
+    }, [user?.email, user?.firstName, user?.lastName]);
+
 
 
     const { travels, loading, error } = useTravels();
@@ -100,11 +111,6 @@ export default function Booking() {
     const formatPrice = (amount) =>
         new Intl.NumberFormat("nl-NL").format(amount);
 
-    function saveBookingToStorage(booking) {
-        const existing = JSON.parse(localStorage.getItem("bookings") || "[]");
-        existing.push(booking);
-        localStorage.setItem("bookings", JSON.stringify(existing));
-    }
 
     function generateBookingId() {
         return `BK-${Date.now()}`;
@@ -369,25 +375,31 @@ export default function Booking() {
                                     className="button button-primary"
                                     type="button"
                                     disabled={!termsAccepted}
-                                    onClick={() => {
-                                        const bookingPayload = {
-                                            id: generateBookingId(),
-                                            createdAt: new Date().toISOString(),
-                                            travelId,
-                                            travelTitle: travel?.title || "Onbekende reis",
-                                            guests,
-                                            startDate,
-                                            contact: formData,
-                                            subtotal,
-                                            serviceFee,
-                                            total,
-                                            userEmail: user?.email || formData.email,
-                                        };
+                                    onClick={async () => {
+                                        try {
+                                            const bookingPayload = {
+                                                id: generateBookingId(),
+                                                createdAt: new Date().toISOString(),
+                                                travelId: Number(travelId),
+                                                travelTitle: travel?.title || "Onbekende reis",
+                                                guests,
+                                                startDate,
+                                                contact: formData,
+                                                subtotal,
+                                                serviceFee,
+                                                total,
+                                                userEmail: user?.email || formData.email,
+                                            };
 
-                                        console.log("Booking payload:", bookingPayload);
+                                            console.log("Booking payload:", bookingPayload);
 
-                                        saveBookingToStorage(bookingPayload);
-                                        setIsConfirmed(true);
+                                            await createBooking(bookingPayload, token);
+
+                                            setIsConfirmed(true);
+                                        } catch (e) {
+                                            console.error("Booking POST failed:", e);
+                                            alert("Boeking opslaan lukt nu niet. Probeer opnieuw.");
+                                        }
                                     }}
                                 >
 

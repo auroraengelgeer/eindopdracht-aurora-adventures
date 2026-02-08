@@ -1,18 +1,31 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useEffect, useMemo, useState } from "react";
+import { getBookings } from "../../api/bookings";
 import "./Profile.css";
 
 export default function Profile() {
 
-    const { user } = useAuth();
+    const { user, token } = useAuth();
 
     const [bookings, setBookings] = useState([]);
 
     useEffect(() => {
-        const stored = JSON.parse(localStorage.getItem("bookings") || "[]");
-        setBookings(stored);
-    }, []);
+        if (!token) return;
+
+        async function fetchBookings() {
+            try {
+                const data = await getBookings(token);
+                setBookings(Array.isArray(data) ? data : []);
+            } catch (e) {
+                console.error("Bookings ophalen mislukt:", e);
+                setBookings([]);
+            }
+        }
+
+        fetchBookings();
+    }, [token]);
+
 
     const myBookings = useMemo(() => {
         if (!user?.email) return [];
@@ -51,19 +64,6 @@ export default function Profile() {
 
                 <div className="profile-card">
                     <h2>Mijn boekingen</h2>
-
-    {/*optioneel:*/}
-                    {/*<button*/}
-                    {/*    className="button button-secondary"*/}
-                    {/*    type="button"*/}
-                    {/*    onClick={() => {*/}
-                    {/*        localStorage.removeItem("bookings");*/}
-                    {/*        setBookings([]);*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*    Boekingen wissen (test)*/}
-                    {/*</button>*/}
-
 
                     {myBookings.length === 0 ? (
                         <div className="profile-empty">
