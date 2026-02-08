@@ -80,3 +80,12 @@
     color: var(--color-black);
     text-decoration: underline;
 }
+
+.auth-alert {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(220, 53, 69, 0.35);
+    background: rgba(220, 53, 69, 0.08);
+    margin-bottom: 1rem;
+    font-weight: 500;
+}

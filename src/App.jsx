@@ -13,13 +13,12 @@ import Faq from "./pages/Faq/Faq.jsx";
 import Layout from "./components/Navigation/Layout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import PublicOnlyRoute from "./components/PublicOnlyRoute/PublicOnlyRoute.jsx";
-
-
-
+import { useAutoLogout } from "./hooks/useAutoLogout";
 
 
 
 function App() {
+    useAutoLogout();
 
   return (
     <>
