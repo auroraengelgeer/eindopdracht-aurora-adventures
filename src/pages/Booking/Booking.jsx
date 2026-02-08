@@ -393,7 +393,7 @@ export default function Booking() {
                                                 firstName: formData.firstName,
                                                 lastName: formData.lastName,
                                                 email: formData.email,
-                                                phone: formData.phone,
+                                                phone: formData.phone || "",
                                                 address: formData.address,
                                                 city: formData.city,
                                                 postalCode: formData.postalCode,
@@ -402,7 +402,6 @@ export default function Booking() {
                                                 serviceFee,
                                                 total,
 
-                                                // koppeling aan ingelogde user (voor nu via email)
                                                 userEmail: user?.email || formData.email,
                                             };
 
