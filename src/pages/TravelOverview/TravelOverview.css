@@ -55,12 +55,23 @@
 }
 
 .travel-card-image {
-    height: 140px;
+    height: 170px;
     background: var(--color-grey-light);
+    overflow: hidden;
+}
+
+.travel-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .travel-card-body {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .travel-card-title {
@@ -114,3 +125,5 @@
 .travel-card-title {
     min-height: 3.2rem; /* ongeveer 2 regels titel */
 }
+
+

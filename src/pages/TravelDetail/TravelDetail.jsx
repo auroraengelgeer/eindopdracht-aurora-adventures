@@ -42,10 +42,19 @@ export default function TravelDetail() {
     return (
         <div className="travel-detail">
             <header className="travel-detail-hero">
+                {travel.imageUrl ? (
+                    <img
+                        className="travel-detail-hero-img"
+                        src={travel.imageUrl}
+                        alt={travel.title}
+                    />
+                ) : null}
+
                 <Link className="back-link" to="/reizen">
                     ← Terug naar overzicht
                 </Link>
             </header>
+
 
             <section className="travel-detail-content">
                 <div className="travel-detail-main">
@@ -118,7 +127,7 @@ export default function TravelDetail() {
                         <Link
                             className="button button-primary booking-cta"
                             to={`/reserveren/${travel.id}`}
-                            state={{ guests }}
+                            state={{guests}}
                         >
                             Boek nu
                         </Link>
