@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useEffect, useMemo, useState } from "react";
 import { getBookings } from "../../api/bookings";
 import { isJwtToken } from "../../helpers/isJwtToken";
+import { deleteBooking } from "../../api/bookings";
 import "./Profile.css";
 
 export default function Profile() {
@@ -44,6 +45,25 @@ export default function Profile() {
 
         fetchBookings();
     }, [token]);
+
+    async function handleDeleteBooking(id) {
+        const confirmDelete = window.confirm(
+            "Weet je zeker dat je deze boeking wilt verwijderen?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            const jwt = isJwtToken(token) ? token : "";
+            await deleteBooking(id, jwt);
+
+            setBookings((prev) => prev.filter((b) => b.id !== id));
+        } catch (e) {
+            console.error("Boeking verwijderen mislukt:", e);
+            alert("Verwijderen mislukt. Probeer opnieuw.");
+        }
+    }
+
 
 
 
@@ -105,7 +125,6 @@ export default function Profile() {
                                     return db - da; // nieuwste bovenaan
                                 })
                                 .map((b) => (
-
                                     <div className="profile-booking" key={b.id}>
                                         <div>
                                             <p className="profile-booking-title">{b.travelTitle}</p>
@@ -115,8 +134,18 @@ export default function Profile() {
                                         </div>
 
                                         <div className="profile-booking-right">
-                                            <p className="profile-booking-price">{formatPrice(b.total)}</p>
+                                            <p className="profile-booking-price">
+                                                {formatPrice(b.total)}
+                                            </p>
                                             <p className="profile-booking-id">{b.id}</p>
+
+                                            <button
+                                                className="profile-booking-delete"
+                                                type="button"
+                                                onClick={() => handleDeleteBooking(b.id)}
+                                            >
+                                                Verwijderen
+                                            </button>
                                         </div>
                                     </div>
                                 ))}

@@ -34,6 +34,35 @@ export default function Booking() {
 
     const [guests, setGuests] = useState(initialGuests);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+
+    function validateStep1() {
+        if (!formData.firstName.trim()) return "Voornaam is verplicht.";
+        if (!formData.lastName.trim()) return "Achternaam is verplicht.";
+        if (!formData.email.trim()) return "Email is verplicht.";
+        if (!formData.phone.trim()) {
+            return "Vul een telefoonnummer in zodat we je kunnen bereiken.";
+        }
+
+        const address = formData.address.trim();
+        if (!address) return "Vul je adres in.";
+        if (!/\d/.test(address)) {
+            return "Voeg ook een huisnummer toe aan je adres.";
+        }
+
+        if (!formData.city.trim()) return "Stad is verplicht.";
+        if (!formData.postalCode.trim()) return "Postcode is verplicht.";
+        return "";
+    }
+
+    function validateStep2() {
+        if (!startDate) return "Startdatum is verplicht.";
+        if (guests < 1) return "Aantal gasten moet minimaal 1 zijn.";
+        return "";
+    }
+
+
 
     useEffect(() => {
         if (!user) return;
@@ -96,10 +125,12 @@ export default function Booking() {
 
 
     function nextStep() {
+        setSubmitError("");
         setStep((prev) => Math.min(prev + 1, 3));
     }
 
     function prevStep() {
+        setSubmitError("");
         setStep((prev) => Math.max(prev - 1, 1));
     }
 
@@ -225,11 +256,11 @@ export default function Booking() {
                                         type="tel"
                                         placeholder="+31 6 12345678"
                                         value={formData.phone}
+                                        required
                                         onChange={(e) =>
                                             setFormData({...formData, phone: e.target.value})
                                         }
                                     />
-
                                 </div>
                             </div>
 
@@ -273,11 +304,28 @@ export default function Booking() {
                                 </div>
                             </div>
 
+                            {submitError && (
+                                <div className="booking-error">
+                                    {submitError}
+                                </div>
+                            )}
+
                             <div className="actions">
-                                <button className="button button-primary" type="button" onClick={nextStep}>
+                                <button
+                                    className="button button-primary"
+                                    type="button"
+                                    onClick={() => {
+                                        const msg = validateStep1();
+                                        if (msg) {
+                                            setSubmitError(msg);
+                                            return;
+                                        }
+                                        setSubmitError("");
+                                        nextStep();
+                                    }}
+                                >
                                     Volgende
                                 </button>
-
                             </div>
                         </>
                     )}
@@ -319,11 +367,29 @@ export default function Booking() {
                                 </ul>
                             </div>
 
+                            {submitError && (
+                                <div className="booking-error">
+                                    {submitError}
+                                </div>
+                            )}
+
                             <div className="actions actions-between">
                                 <button className="button button-secondary" type="button" onClick={prevStep}>
                                     Vorige
                                 </button>
-                                <button className="button button-primary" type="button" onClick={nextStep}>
+                                <button
+                                    className="button button-primary"
+                                    type="button"
+                                    onClick={() => {
+                                        const msg = validateStep2();
+                                        if (msg) {
+                                            setSubmitError(msg);
+                                            return;
+                                        }
+                                        setSubmitError("");
+                                        nextStep();
+                                    }}
+                                >
                                     Volgende
                                 </button>
                             </div>
@@ -369,6 +435,13 @@ export default function Booking() {
                                 </label>
                             </div>
 
+                            {submitError && (
+                                <div className="booking-error">
+                                    {submitError}
+                                </div>
+                            )}
+
+
                             <div className="actions actions-between">
                                 <button className="button button-secondary" type="button" onClick={prevStep}>
                                     Vorige
@@ -376,11 +449,14 @@ export default function Booking() {
                                 <button
                                     className="button button-primary"
                                     type="button"
-                                    disabled={!termsAccepted}
+                                    disabled={!termsAccepted || isSubmitting}
                                     onClick={async () => {
+                                        setSubmitError("");
+                                        setIsSubmitting(true);
+
                                         try {
                                             const bookingPayload = {
-                                                id: generateBookingId(), // number (Date.now)
+                                                id: generateBookingId(),
                                                 createdAt: new Date().toISOString(),
 
                                                 travelId: Number(travelId),
@@ -389,11 +465,10 @@ export default function Booking() {
                                                 guests,
                                                 startDate,
 
-                                                // contactgegevens plat opslaan (zoals schema)
                                                 firstName: formData.firstName,
                                                 lastName: formData.lastName,
                                                 email: formData.email,
-                                                phone: formData.phone || "",
+                                                phone: formData.phone,
                                                 address: formData.address,
                                                 city: formData.city,
                                                 postalCode: formData.postalCode,
@@ -411,18 +486,17 @@ export default function Booking() {
                                             setIsConfirmed(true);
                                         } catch (e) {
                                             console.error("Booking POST failed:", e);
-                                            alert("Boeking opslaan lukt nu niet. Probeer opnieuw.");
+                                            setSubmitError("Boeking opslaan lukt nu niet. Probeer opnieuw.");
+                                        } finally {
+                                            setIsSubmitting(false);
                                         }
                                     }}
-
                                 >
-
-                                    Boeking bevestigen
+                                    {isSubmitting ? "Bezig met opslaan..." : "Boeking bevestigen"}
                                 </button>
-
-                            </div>
+                        </div>
                         </>
-                    )}
+                        )}
                 </div>
 
                     <aside className="booking-summary-card">

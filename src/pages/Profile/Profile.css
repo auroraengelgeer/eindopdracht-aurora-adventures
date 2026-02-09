@@ -91,3 +91,18 @@
     transform: translateY(-1px);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
 }
+
+.profile-booking-delete {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    background: transparent;
+    border: none;
+    color: var(--color-orange-dark);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.profile-booking-delete:hover {
+    color: var(--color-black);
+}
