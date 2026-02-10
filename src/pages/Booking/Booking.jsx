@@ -6,7 +6,7 @@ import { createBooking } from "../../api/bookings";
 import { isJwtToken } from "../../helpers/isJwtToken";
 import PageState from "../../components/PageState/PageState";
 import GuestSelector from "../../components/GuestSelector/GuestSelector";
-import { formatDurationDays, formatPriceEUR } from "../../helpers/format";
+import { formatDurationDays } from "../../helpers/format";
 import BookingSteps from "../../components/BookingSteps/BookingSteps";
 import FormField from "../../components/FormField/FormField";
 import BookingSummaryCard from "../../components/BookingSummaryCard/BookingSummaryCard";
