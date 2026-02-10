@@ -3,12 +3,14 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { formatDateNL, formatPriceEUR } from "../../helpers/format";
 import StatusMessage from "../../components/StatusMessage/StatusMessage";
 import { useMyBookings } from "../../hooks/useMyBookings";
+import { useMyProfile } from "../../hooks/useMyProfile";
 import "./Profile.css";
 
 export default function Profile() {
     const { user, token } = useAuth();
 
     const { myBookings, loading, error, removeBooking } = useMyBookings(user?.email, token);
+    const { profile, loadingProfile, profileError } = useMyProfile(user?.email, token);
 
     async function handleDeleteBooking(id) {
         const confirmDelete = window.confirm("Weet je zeker dat je deze boeking wilt verwijderen?");
@@ -30,6 +32,10 @@ export default function Profile() {
             return db - da; // nieuwste bovenaan
         });
 
+    const displayName = profile
+        ? `${profile.firstName ?? ""} ${profile.lastName ?? ""}`.trim()
+        : "";
+
     return (
         <div className="profile">
             <header className="profile-hero">
@@ -44,7 +50,7 @@ export default function Profile() {
                     <div className="profile-row">
                         <span>Naam</span>
                         <span>
-                            {user?.firstName} {user?.lastName}
+                            {loadingProfile ? "Laden..." : displayName || "—"}
                         </span>
                     </div>
 
@@ -52,6 +58,8 @@ export default function Profile() {
                         <span>E-mail</span>
                         <span>{user?.email}</span>
                     </div>
+
+                    {profileError ? <StatusMessage>{profileError}</StatusMessage> : null}
 
                     <div className="profile-actions">
                         <button className="button button-secondary" type="button" disabled>
