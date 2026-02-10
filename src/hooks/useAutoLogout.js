@@ -18,9 +18,14 @@ export function useAutoLogout() {
         }
 
         // Tijd tot expiry berekenen
-        const timeoutMs = getTokenExpiryMs(token);
+        const expMs = getTokenExpiryMs(token);
+        const timeoutMs = expMs - Date.now();
 
-        if (!timeoutMs || timeoutMs <= 0) return;
+        if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+            logout();
+            navigate("/inloggen", { replace: true, state: { expired: true } });
+            return;
+        }
 
         const timeoutId = setTimeout(() => {
             logout();

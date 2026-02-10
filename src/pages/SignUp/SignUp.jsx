@@ -31,7 +31,6 @@ export default function SignUp() {
                 firstName,
                 lastName,
                 email: normalizedEmail,
-                userId: newUser?.id,
                 createdAt: new Date().toISOString(),
             });
 

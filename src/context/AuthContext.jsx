@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { loginRequest } from "../api/auth";
-import { getTokenExpiryMs, isTokenExpired } from "../helpers/jwt";
+import { isTokenExpired } from "../helpers/jwt";
 
 
 const AuthContext = createContext(null);
@@ -18,8 +18,6 @@ export function AuthProvider({ children }) {
     async function loginWithCredentials(email, password) {
         const data = await loginRequest(email, password);
 
-        // Verwacht format:
-        // { token: "...", user: { email, roles, (soms id) } }
         const receivedToken = data?.token || "";
         const userData = data?.user || null;
 
@@ -49,29 +47,6 @@ export function AuthProvider({ children }) {
         setUser(null);
     }
 
-    useEffect(() => {
-        if (!token) return;
-
-        // Als token al verlopen is: direct uitloggen
-        if (isTokenExpired(token)) {
-            logout();
-            return;
-        }
-
-        const expMs = getTokenExpiryMs(token);
-        if (!expMs) {
-            logout();
-            return;
-        }
-
-        const timeoutMs = expMs - Date.now();
-
-        const timer = setTimeout(() => {
-            logout();
-        }, timeoutMs);
-
-        return () => clearTimeout(timer);
-    }, [token]);
 
     const value = useMemo(
         () => ({ token, isAuthenticated, user, login, loginWithCredentials, logout }),
