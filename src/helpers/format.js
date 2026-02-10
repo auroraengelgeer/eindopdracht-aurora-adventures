@@ -13,3 +13,14 @@ export function formatPriceEUR(amount) {
         maximumFractionDigits: 0,
     }).format(n);
 }
+
+export function formatDateNL(iso) {
+    if (!iso) return "Geen datum";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "Geen datum";
+    return new Intl.DateTimeFormat("nl-NL", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    }).format(d);
+}

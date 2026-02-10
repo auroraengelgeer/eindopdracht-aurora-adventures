@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useTravels } from "../../hooks/useTravels";
+import { useTravel } from "../../hooks/useTravel";
 import { createBooking } from "../../api/bookings";
 import { isJwtToken } from "../../helpers/isJwtToken";
+import PageState from "../../components/PageState/PageState";
+import GuestSelector from "../../components/GuestSelector/GuestSelector";
+import { formatDurationDays } from "../../helpers/format";
+import BookingSteps from "../../components/BookingSteps/BookingSteps";
+import FormField from "../../components/FormField/FormField";
+import BookingSummaryCard from "../../components/BookingSummaryCard/BookingSummaryCard";
 import "./Booking.css";
 
 
@@ -86,42 +92,39 @@ export default function Booking() {
 
 
 
-    const { travels, loading, error } = useTravels();
+    const { travel, loading, error } = useTravel(travelId);
 
-    const travel = travels.find((t) => String(t.id) === String(travelId));
 
     if (loading) {
-        return (
-            <div className="booking">
-                <h1>Boeking afronden</h1>
-                <p>Reis laden...</p>
-            </div>
-        );
+        return <PageState className="booking" title="Boeking afronden" message="Reis laden..." />;
     }
+
 
     if (error) {
         return (
-            <div className="booking">
-                <h1>Boeking afronden</h1>
-                <p>{error}</p>
-                <Link to="/reizen" className="button button-secondary">
-                    Terug naar reizen
-                </Link>
-            </div>
+            <PageState
+                className="booking"
+                title="Boeking afronden"
+                message={error}
+                actionTo="/reizen"
+                actionLabel="Terug naar reizen"
+            />
         );
     }
 
+
     if (!travel) {
         return (
-            <div className="booking">
-                <h1>Boeking afronden</h1>
-                <p>Reis niet gevonden.</p>
-                <Link to="/reizen" className="button button-secondary">
-                    Terug naar reizen
-                </Link>
-            </div>
+            <PageState
+                className="booking"
+                title="Boeking afronden"
+                message="Reis niet gevonden."
+                actionTo="/reizen"
+                actionLabel="Terug naar reizen"
+            />
         );
     }
+
 
 
     function nextStep() {
@@ -140,9 +143,6 @@ export default function Booking() {
     const subtotal = pricePerPerson * guests;
     const total = subtotal + serviceFee;
 
-    const formatPrice = (amount) =>
-        new Intl.NumberFormat("nl-NL").format(amount);
-
 
     function generateBookingId() {
         return Date.now(); // number
@@ -153,7 +153,7 @@ export default function Booking() {
         if (!travel) return "";
 
         if (travel.category === "tour") {
-            return `${travel.durationDays} dag activiteit`;
+            return `${formatDurationDays(travel.durationDays)} activiteit`;
         }
 
         if (travel.category === "package") {
@@ -171,15 +171,7 @@ export default function Booking() {
                 <p className="booking-hero-sub">{travel?.title}</p>
             </header>
 
-            <div className="booking-steps">
-            <div className={`step ${step === 1 ? "step-active" : ""} ${step > 1 ? "step-done" : ""}`}>1</div>
-                <div className={`step-line ${step > 1 ? "step-line-active" : ""}`}/>
-
-                <div className={`step ${step === 2 ? "step-active" : ""} ${step > 2 ? "step-done" : ""}`}>2</div>
-                <div className={`step-line ${step > 2 ? "step-line-active" : ""}`}/>
-
-                <div className={`step ${step === 3 ? "step-active" : ""}`}>3</div>
-            </div>
+            <BookingSteps step={step} />
 
 
             <p className="booking-step-label">
@@ -215,93 +207,78 @@ export default function Booking() {
                             <h2>Contactgegevens</h2>
 
                             <div className="grid-2">
-                                <div className="field">
-                                    <label>Voornaam *</label>
+                                <FormField label="Voornaam" required>
                                     <input
                                         type="text"
                                         placeholder="Jan"
                                         value={formData.firstName}
-                                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
-                                <div className="field">
-                                    <label>Achternaam *</label>
+                                <FormField label="Achternaam" required>
                                     <input
                                         type="text"
                                         placeholder="de Vries"
                                         value={formData.lastName}
-                                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
                             </div>
 
                             <div className="grid-2">
-                                <div className="field">
-                                    <label>Email *</label>
+
+                                <FormField label="Email" required>
                                     <input
                                         type="email"
                                         placeholder="jan@voorbeeld.nl"
                                         value={formData.email}
-                                        onChange={(e) =>
-                                            setFormData({...formData, email: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
-                                <div className="field">
-                                    <label>Telefoon</label>
+                                <FormField label="Telefoon" required>
                                     <input
                                         type="tel"
                                         placeholder="+31 6 12345678"
                                         value={formData.phone}
-                                        required
-                                        onChange={(e) =>
-                                            setFormData({...formData, phone: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     />
-                                </div>
+                                </FormField>
+
                             </div>
 
-                            <div className="field">
-                                <label>Adres *</label>
+                            <FormField label="Adres" required>
                                 <input
                                     type="text"
                                     placeholder="Straatnaam 123"
                                     value={formData.address}
-                                    onChange={(e) =>
-                                        setFormData({...formData, address: e.target.value})
-                                    }
+                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                 />
+                            </FormField>
 
-                            </div>
 
                             <div className="grid-2">
-                                <div className="field">
-                                    <label>Stad *</label>
+
+                                <FormField label="Stad" required>
                                     <input
                                         type="text"
                                         placeholder="Amsterdam"
                                         value={formData.city}
-                                        onChange={(e) =>
-                                            setFormData({...formData, city: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
-                                <div className="field">
-                                    <label>Postcode *</label>
+                                <FormField label="Postcode" required>
                                     <input
                                         type="text"
                                         placeholder="1234 AB"
                                         value={formData.postalCode}
-                                        onChange={(e) =>
-                                            setFormData({...formData, postalCode: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
                             </div>
 
                             {submitError && (
@@ -334,29 +311,17 @@ export default function Booking() {
                         <>
                             <h2>Reisdetails</h2>
 
-                            <div className="field">
-                                <label>Startdatum *</label>
+                            <FormField label="Startdatum" required>
                                 <input
                                     type="date"
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                 />
+                            </FormField>
 
-                            </div>
 
-                            <div className="field">
-                                <label>Aantal gasten</label>
-                                <div className="guest-row">
-                                    <button type="button" className="guest-btn"
-                                            onClick={() => setGuests(g => Math.max(1, g - 1))}>-
-                                    </button>
-                                    <span>{guests}</span>
-                                    <button type="button" className="guest-btn"
-                                            onClick={() => setGuests(g => g + 1)}>+
-                                    </button>
+                            <GuestSelector value={guests} onChange={setGuests} min={1} />
 
-                                </div>
-                            </div>
 
                             <div className="info-box">
                                 <p><strong>Belangrijke informatie</strong></p>
@@ -499,33 +464,16 @@ export default function Booking() {
                         )}
                 </div>
 
-                    <aside className="booking-summary-card">
-                        <div className="summary-image" aria-label="Reis afbeelding"/>
-                        <h3>{travel?.title}</h3>
-                        <p className="summary-sub">{getSummarySubtitle(travel)}</p>
+                    <BookingSummaryCard
+                        travel={travel}
+                        subtitle={getSummarySubtitle(travel)}
+                        guests={guests}
+                        pricePerPerson={pricePerPerson}
+                        subtotal={subtotal}
+                        serviceFee={serviceFee}
+                        total={total}
+                    />
 
-                        <div className="summary-row">
-                            <span>€{pricePerPerson} × {guests} gasten</span>
-                            <span>€{formatPrice(subtotal)}</span>
-                        </div>
-                        <div className="summary-row">
-                            <span>Servicekosten</span>
-                            <span>€{formatPrice(serviceFee)}</span>
-                        </div>
-
-                        <div className="summary-total">
-                            <span>Totaal</span>
-                            <span>€{formatPrice(total)}</span>
-                        </div>
-
-                        <div className="summary-safe">
-                            <span>✓</span>
-                            <p>
-                                <strong>Veilig betalen</strong><br/>
-                                Je gegevens zijn beschermd
-                            </p>
-                        </div>
-                    </aside>
                 </section>
             )}
         </div>

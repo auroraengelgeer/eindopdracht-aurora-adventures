@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import "./TravelOverview.css";
 import { useTravels } from "../../hooks/useTravels";
-
 import SearchInput from "../../components/SearchInput/SearchInput";
 import Tabs from "../../components/Tabs/Tabs";
 import StatusMessage from "../../components/StatusMessage/StatusMessage";
