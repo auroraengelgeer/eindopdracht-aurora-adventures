@@ -1,0 +1,679 @@
+{
+  "collections": [
+    {
+      "name": "travels",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "durationDays",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pricePerPerson",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "shortDescription",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "longDescription",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "highlights",
+          "type": "array",
+          "required": false
+        },
+        {
+          "name": "included",
+          "type": "array",
+          "required": false
+        },
+        {
+          "name": "imageUrl",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "permissions": {
+        "GET": [
+          "anonymous",
+          "user",
+          "admin"
+        ],
+        "POST": [
+          "admin"
+        ],
+        "PUT": [
+          "admin"
+        ],
+        "PATCH": [
+          "admin"
+        ],
+        "DELETE": [
+          "admin"
+        ]
+      }
+    },
+    {
+      "name": "bookings",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "travelId",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "travelTitle",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "userEmail",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "guests",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "postalCode",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "subtotal",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "serviceFee",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "createdAt",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "permissions": {
+        "GET": [
+          "user",
+          "admin"
+        ],
+        "POST": [
+          "user",
+          "admin"
+        ],
+        "PUT": [
+          "admin"
+        ],
+        "PATCH": [
+          "admin"
+        ],
+        "DELETE": [
+          "user",
+          "admin"
+        ]
+      }
+    },
+    {
+      "name": "profiles",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "createdAt",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "permissions": {
+        "GET": [
+          "user",
+          "admin"
+        ],
+        "POST": [
+          "anonymous",
+          "user",
+          "admin"
+        ],
+        "PUT": [
+          "admin"
+        ],
+        "PATCH": [
+          "admin"
+        ],
+        "DELETE": [
+          "admin"
+        ]
+      }
+    }
+  ],
+  "users": [
+    {
+      "email": "admin@auroraadventures.nl",
+      "password": "Admin123!",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "email": "user@auroraadventures.nl",
+      "password": "User123!",
+      "roles": [
+        "user"
+      ]
+    }
+  ],
+  "data": {
+    "travels": [
+      {
+        "id": 1,
+        "title": "Tropical Beach Escape",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 7,
+        "pricePerPerson": 1499,
+        "shortDescription": "Zon, zee en ontspanning met optionele tours.",
+        "longDescription": "Geniet van een ontspannen vakantie op de Malediven met prachtige stranden, snorkelspots en optionele excursies.",
+        "highlights": [
+          "Snorkelen op het huisrif",
+          "Sunset cruise",
+          "Lokale eilandtour"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-1.jpg"
+      },
+      {
+        "id": 2,
+        "title": "Romantic Lagoon Getaway",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 5,
+        "pricePerPerson": 1299,
+        "shortDescription": "Voor koppels: rust, lagoon views en sunset vibes.",
+        "longDescription": "Een romantisch verblijf met lagoon-luxe en tijd voor elkaar.",
+        "highlights": [
+          "Sunset diner",
+          "Lagoon villa",
+          "Couples snorkel"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-2.jpg"
+      },
+      {
+        "id": 3,
+        "title": "Diving Discovery Week",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 7,
+        "pricePerPerson": 1699,
+        "shortDescription": "Duikweek met mooie rifspots en relaxmomenten.",
+        "longDescription": "Perfect voor duikers: meerdere duikmomenten en rust in het resort.",
+        "highlights": [
+          "Rifduiken",
+          "Boat dives",
+          "Equipment support"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-3.jpg"
+      },
+      {
+        "id": 4,
+        "title": "Local Island Experience",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 6,
+        "pricePerPerson": 1099,
+        "shortDescription": "Cultureel, lokaal en budgetvriendelijk.",
+        "longDescription": "Ontdek het lokale leven met excursies, strand en lekker eten.",
+        "highlights": [
+          "Local market",
+          "Culturele stop",
+          "Beach day"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-4.jpg"
+      },
+      {
+        "id": 5,
+        "title": "Adventure & Activity Mix",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 4,
+        "pricePerPerson": 899,
+        "shortDescription": "Korte break met actieve uitstapjes.",
+        "longDescription": "Voor wie veel wil doen in korte tijd: snorkel, boot en eiland vibes.",
+        "highlights": [
+          "Snorkel trip",
+          "Boottocht",
+          "Island stop"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-5.jpg"
+      },
+      {
+        "id": 6,
+        "title": "Ladies Only Relax Retreat",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 7,
+        "pricePerPerson": 1599,
+        "shortDescription": "Ladies only: ontspanning, zon en quality time.",
+        "longDescription": "Rustige dagen, fijne excursies en ruimte om te ontspannen.",
+        "highlights": [
+          "Relax days",
+          "Sunset moment",
+          "Optionele spa"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-6.jpg"
+      },
+      {
+        "id": 7,
+        "title": "Family Fun Island Week",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 7,
+        "pricePerPerson": 1399,
+        "shortDescription": "Gezinsvriendelijke week met activiteiten voor iedereen.",
+        "longDescription": "Een complete familieweek met strand, lagoon en leuke uitstapjes.",
+        "highlights": [
+          "Family beach day",
+          "Snorkel intro",
+          "Boat cruise"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-7.jpg"
+      },
+      {
+        "id": 8,
+        "title": "Luxury Overwater Escape",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 6,
+        "pricePerPerson": 2199,
+        "shortDescription": "Overwater vibes, luxe en uitzicht op turquoise water.",
+        "longDescription": "Een luxe verblijf met extra comfort en prachtige views.",
+        "highlights": [
+          "Overwater villa",
+          "Lagoon views",
+          "Sunset deck"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-8.jpg"
+      },
+      {
+        "id": 9,
+        "title": "Budget Beach Break",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 5,
+        "pricePerPerson": 799,
+        "shortDescription": "Betaalbare strandvakantie met optionele tours.",
+        "longDescription": "Relax aan het strand met ruimte om excursies bij te boeken.",
+        "highlights": [
+          "Beach days",
+          "Local food",
+          "Optional tours"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-9.jpg"
+      },
+      {
+        "id": 10,
+        "title": "Wellness & Yoga Retreat",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 6,
+        "pricePerPerson": 1499,
+        "shortDescription": "Rust, yoga en opladen aan zee.",
+        "longDescription": "Een wellnessweek met rustige momenten en fijne routine.",
+        "highlights": [
+          "Yoga sessions",
+          "Mindful mornings",
+          "Beach relaxation"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-10.jpg"
+      },
+      {
+        "id": 11,
+        "title": "Eco Island Stay",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 7,
+        "pricePerPerson": 1299,
+        "shortDescription": "Duurzame island vibes met natuurfocus.",
+        "longDescription": "Een verblijf met aandacht voor natuur en lokale beleving.",
+        "highlights": [
+          "Nature focus",
+          "Local culture",
+          "Low-impact trips"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-11.jpg"
+      },
+      {
+        "id": 12,
+        "title": "Honeymoon Spark Package",
+        "location": "Malediven",
+        "category": "package",
+        "durationDays": 7,
+        "pricePerPerson": 1899,
+        "shortDescription": "Huwelijksreis met romantische extra’s.",
+        "longDescription": "Romantische week met mooie momenten en extra’s voor twee.",
+        "highlights": [
+          "Sunset cruise",
+          "Romantic dinner",
+          "Lagoon time"
+        ],
+        "included": [
+          "Ontbijt",
+          "Airport transfer",
+          "Hotel verblijf"
+        ],
+        "imageUrl": "/images/travels/travel-12.jpg"
+      },
+      {
+        "id": 101,
+        "title": "Dolphin & Snorkel Tour",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 89,
+        "shortDescription": "Dolfijnen spotten + snorkel stop.",
+        "longDescription": "Boottocht met dolfijnen spotten en snorkelen in een lagoon.",
+        "highlights": [
+          "Dolfijnen",
+          "Snorkel stop",
+          "Foto momenten"
+        ],
+        "included": [
+          "Boottocht",
+          "Snorkelmasker",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-101.jpg"
+      },
+      {
+        "id": 102,
+        "title": "Island Hopping Adventure",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 119,
+        "shortDescription": "Bezoek meerdere eilanden en ontdek lokale cultuur.",
+        "longDescription": "Island hopping langs lokale eilanden met vrije tijd en gids.",
+        "highlights": [
+          "Lokale markt",
+          "Culturele stop",
+          "Beach break"
+        ],
+        "included": [
+          "Boottransfer",
+          "Gids",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-102.jpg"
+      },
+      {
+        "id": 103,
+        "title": "Sunset Cruise",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 59,
+        "shortDescription": "Golden hour op zee.",
+        "longDescription": "Relaxte sunset cruise met uitzicht en foto-momenten.",
+        "highlights": [
+          "Sunset views",
+          "Chill vibes",
+          "Foto’s"
+        ],
+        "included": [
+          "Boottocht",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-103.jpg"
+      },
+      {
+        "id": 104,
+        "title": "Sandbank Picnic Trip",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 99,
+        "shortDescription": "Picknick op een zandbank midden in zee.",
+        "longDescription": "Unieke trip naar een sandbank met tijd om te zwemmen en relaxen.",
+        "highlights": [
+          "Sandbank",
+          "Zwemmen",
+          "Foto spot"
+        ],
+        "included": [
+          "Boottransfer",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-104.jpg"
+      },
+      {
+        "id": 105,
+        "title": "Night Fishing Experience",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 49,
+        "shortDescription": "Vissen bij zonsondergang/avond.",
+        "longDescription": "Traditionele night fishing met gids en uitleg.",
+        "highlights": [
+          "Night fishing",
+          "Local style",
+          "Relaxed boat time"
+        ],
+        "included": [
+          "Boottocht",
+          "Gids",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-105.jpg"
+      },
+      {
+        "id": 106,
+        "title": "House Reef Snorkel",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 29,
+        "shortDescription": "Snorkelen bij het huisrif met korte briefing.",
+        "longDescription": "Ideaal als je laagdrempelig wil snorkelen met begeleiding.",
+        "highlights": [
+          "Huisrif",
+          "Koraal",
+          "Makkelijk toegankelijk"
+        ],
+        "included": [
+          "Snorkelmasker",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-106.jpg"
+      },
+      {
+        "id": 107,
+        "title": "Local Food & Market Tour",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 39,
+        "shortDescription": "Proef lokaal eten en bezoek de markt.",
+        "longDescription": "Een smakelijke tour langs lokale plekken met korte stops.",
+        "highlights": [
+          "Local food",
+          "Market stop",
+          "Culture"
+        ],
+        "included": [
+          "Gids",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-107.jpg"
+      },
+      {
+        "id": 108,
+        "title": "Kayak Lagoon Session",
+        "location": "Malediven",
+        "category": "tour",
+        "durationDays": 1,
+        "pricePerPerson": 25,
+        "shortDescription": "Kajakken in de rustige lagoon.",
+        "longDescription": "Een korte, relaxte kayak-session met mooie views.",
+        "highlights": [
+          "Lagoon",
+          "Kayak",
+          "Easy activity"
+        ],
+        "included": [
+          "Kayak rental",
+          "Water"
+        ],
+        "imageUrl": "/images/tours/tour-108.jpg"
+      }
+    ],
+    "profiles": []
+  }
+}
