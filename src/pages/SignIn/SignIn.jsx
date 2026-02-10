@@ -6,38 +6,32 @@ import "./SignIn.css";
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [showSignupSuccess, setShowSignupSuccess] = useState(false);
-
 
     const { loginWithCredentials } = useAuth();
     const navigate = useNavigate();
-
     const location = useLocation();
 
-    const expired = Boolean(location.state?.expired);
-    const signupEmail = location.state?.email || "";
-
+    const [expiredNotice, setExpiredNotice] = useState(false);
+    const [signupNotice, setSignupNotice] = useState(false);
 
     const redirectTo = location.state?.from?.pathname || "/profiel";
 
     useEffect(() => {
+        const expired = Boolean(location.state?.expired);
         const signupSuccess = Boolean(location.state?.signupSuccess);
+        const signupEmail = location.state?.email || "";
 
-        if (signupSuccess) {
-            setShowSignupSuccess(true);
+        if (expired) setExpiredNotice(true);
+        if (signupSuccess) setSignupNotice(true);
 
-            if (signupEmail) {
-                setEmail(signupEmail);
-            }
-
-            navigate(location.pathname, { replace: true, state: {} });
+        if (signupSuccess && signupEmail) {
+            setEmail(signupEmail);
         }
 
-        if (expired) {
+        if (expired || signupSuccess) {
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [expired, signupEmail, navigate, location.pathname, location.state]);
-
+    }, []);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -53,37 +47,31 @@ export default function SignIn() {
 
     return (
         <div className="auth-page">
-            {/* LINKS */}
             <section className="auth-left">
                 <div className="auth-left-overlay">
                     <h1 className="auth-left-title">Welkom terug!</h1>
                     <p className="auth-left-text">
-                        In deze persoonlijke reisomgeving vind je jouw geboekte reizen en
-                        activiteiten. Laat de voorpret vast beginnen!
+                        In deze persoonlijke reisomgeving vind je jouw geboekte reizen en activiteiten.
+                        Laat de voorpret vast beginnen!
                     </p>
                 </div>
             </section>
 
-            {/* RECHTS */}
             <section className="auth-right">
                 <div className="auth-card">
                     <h2 className="auth-title">Log in</h2>
 
-                    {expired && (
+                    {expiredNotice && (
                         <div className="auth-alert">
                             Je sessie is verlopen. Log opnieuw in.
                         </div>
                     )}
 
-                    {showSignupSuccess && (
+                    {signupNotice && (
                         <div className="auth-alert auth-alert--success">
-                            Je registratie is ontvangen. Gebruik een demo account om in te loggen.
-                            <br />
-                            Demo gebruiker: <code>user@auroraadventures.nl</code> — Wachtwoord: <code>User123!</code>
+                            Je account is aangemaakt. Log hieronder in met je e-mail en wachtwoord.
                         </div>
                     )}
-
-
 
                     <form className="auth-form" onSubmit={handleSubmit}>
                         <div className="field">

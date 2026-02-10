@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { createProfile } from "../../api/profiles";
+import { createUser } from "../../api/users";
 import "./SignUp.css";
 
 
@@ -20,6 +21,14 @@ export default function SignUp() {
         e.preventDefault();
 
         try {
+            // 1) Maak éérst een echte user aan (kan daarna inloggen)
+            await createUser({
+                email,
+                password,
+                roles: ["user"],
+            });
+
+            // 2) Sla daarna profieldata op in profiles-collectie
             const profilePayload = {
                 id: Date.now(),
                 firstName,
@@ -30,13 +39,21 @@ export default function SignUp() {
 
             await createProfile(profilePayload);
 
-            // ✅ ga naar login met succesmelding + email prefill
+            // 3) Door naar login met succes state + email prefill
             navigate("/inloggen", {
                 replace: true,
                 state: { signupSuccess: true, email },
             });
         } catch (err) {
             console.error("Signup failed:", err);
+
+            // nette, herkenbare foutmelding bij duplicaat
+            const msg = String(err?.message || "");
+            if (msg.includes("already exists") || msg.includes("exists") || msg.includes("400")) {
+                alert("Dit e-mailadres is al geregistreerd. Log in of gebruik een ander e-mailadres.");
+                return;
+            }
+
             alert("Registreren mislukt. Probeer opnieuw.");
         }
     }
