@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Navigation from "./Navigation.jsx";
+import Navigation from "./components/Navigation/Navigation.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 
 export default function Layout() {
     const location = useLocation();
@@ -9,16 +10,21 @@ export default function Layout() {
         location.pathname === "/registreren";
 
     return (
-        <>
+        <div className="app-shell">
             <Navigation variant={isAuthPage ? "auth" : "default"} />
 
             {isAuthPage ? (
-                <Outlet />
+                <main className="app-main">
+                    <Outlet />
+                </main>
             ) : (
-                <main className="page-container">
+                <main className="app-main page-container">
                     <Outlet />
                 </main>
             )}
-        </>
+
+            {/* Footer niet tonen op auth pagina's */}
+            {!isAuthPage && <Footer />}
+        </div>
     );
 }

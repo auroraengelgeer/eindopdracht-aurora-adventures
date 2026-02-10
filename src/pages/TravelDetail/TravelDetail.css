@@ -1,11 +1,28 @@
 .travel-detail-hero {
-    height: 160px;
+    height: 440px;
     border-radius: 18px;
     background: var(--color-grey-light);
     margin-bottom: 1.5rem;
     position: relative;
     overflow: hidden;
 }
+
+.travel-detail-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.travel-detail-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+}
+
 
 .back-link {
     position: absolute;
@@ -17,7 +34,10 @@
     padding: 0.5rem 0.75rem;
     border-radius: 999px;
     color: var(--color-black);
+    z-index: 2;
 }
+
+
 
 .travel-detail-content {
     display: grid;
@@ -141,12 +161,19 @@
     opacity: 0.75;
 }
 
+.travel-detail-main {
+    min-width: 0;
+}
+
 @media (max-width: 900px) {
     .travel-detail-content {
         grid-template-columns: 1fr;
     }
 }
 
-.travel-detail-main {
-    min-width: 0;
+
+@media (max-width: 768px) {
+    .travel-detail-hero {
+        height: 200px;
+    }
 }

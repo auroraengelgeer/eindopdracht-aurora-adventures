@@ -17,6 +17,22 @@
     margin-top: 1rem;
 }
 
+.booking-error {
+    margin: 1rem 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+
+    background: rgba(243, 189, 137, 0.18);
+    border: 1px solid rgba(243, 189, 137, 0.45);
+
+    color: var(--color-orange-dark);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+
+
 .step {
     width: 34px;
     height: 34px;

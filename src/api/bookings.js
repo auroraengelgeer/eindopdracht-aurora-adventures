@@ -14,3 +14,13 @@ export function createBooking(payload, token) {
 export function getBookings(token) {
     return apiFetch("/api/bookings", {}, token);
 }
+
+export function deleteBooking(id, token) {
+    return apiFetch(
+        `/api/bookings/${id}`,
+        {
+            method: "DELETE",
+        },
+        token
+    );
+}

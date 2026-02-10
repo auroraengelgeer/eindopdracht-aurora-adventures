@@ -86,7 +86,15 @@ export default function TravelOverview() {
                 <div className="travel-grid">
                     {filteredTravels.map((t) => (
                         <article className="travel-card" key={t.id}>
-                            <div className="travel-card-image" />
+                            <div className="travel-card-image">
+                                {t.imageUrl ? (
+                                    <img className="travel-card-img"
+                                         src={t.imageUrl || "/images/placeholder.jpg"}
+                                         alt={t.title}
+                                         loading="lazy"/>
+                                ) : null}
+                            </div>
+
 
                             <div className="travel-card-body">
                                 <h3 className="travel-card-title">{t.title}</h3>
@@ -105,7 +113,7 @@ export default function TravelOverview() {
                     ))}
 
                     {filteredTravels.length === 0 && (
-                        <p style={{ opacity: 0.8 }}>Geen resultaten gevonden.</p>
+                        <p style={{opacity: 0.8}}>Geen resultaten gevonden.</p>
                     )}
                 </div>
             </section>

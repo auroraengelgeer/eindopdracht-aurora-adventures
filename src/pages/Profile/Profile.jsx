@@ -3,9 +3,28 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useEffect, useMemo, useState } from "react";
 import { getBookings } from "../../api/bookings";
 import { isJwtToken } from "../../helpers/isJwtToken";
+import { deleteBooking } from "../../api/bookings";
 import "./Profile.css";
 
 export default function Profile() {
+
+    const formatPrice = (amount) =>
+        new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" }).format(
+            Number(amount || 0)
+        );
+
+    const formatDate = (iso) => {
+        if (!iso) return "Geen datum";
+        // iso kan "YYYY-MM-DD" zijn of volledige ISO string
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return "Geen datum";
+        return new Intl.DateTimeFormat("nl-NL", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        }).format(d);
+    };
+
 
     const { user, token } = useAuth();
 
@@ -26,6 +45,25 @@ export default function Profile() {
 
         fetchBookings();
     }, [token]);
+
+    async function handleDeleteBooking(id) {
+        const confirmDelete = window.confirm(
+            "Weet je zeker dat je deze boeking wilt verwijderen?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            const jwt = isJwtToken(token) ? token : "";
+            await deleteBooking(id, jwt);
+
+            setBookings((prev) => prev.filter((b) => b.id !== id));
+        } catch (e) {
+            console.error("Boeking verwijderen mislukt:", e);
+            alert("Verwijderen mislukt. Probeer opnieuw.");
+        }
+    }
+
 
 
 
@@ -81,19 +119,33 @@ export default function Profile() {
                         <div className="profile-bookings">
                             {myBookings
                                 .slice()
-                                .reverse()
+                                .sort((a, b) => {
+                                    const da = new Date(a.createdAt || 0).getTime();
+                                    const db = new Date(b.createdAt || 0).getTime();
+                                    return db - da; // nieuwste bovenaan
+                                })
                                 .map((b) => (
                                     <div className="profile-booking" key={b.id}>
                                         <div>
                                             <p className="profile-booking-title">{b.travelTitle}</p>
                                             <p className="profile-booking-meta">
-                                                {b.startDate || "Geen datum"} • {b.guests} gasten
+                                                {formatDate(b.startDate)} • {b.guests} gasten
                                             </p>
                                         </div>
 
                                         <div className="profile-booking-right">
-                                            <p className="profile-booking-price">€{b.total}</p>
+                                            <p className="profile-booking-price">
+                                                {formatPrice(b.total)}
+                                            </p>
                                             <p className="profile-booking-id">{b.id}</p>
+
+                                            <button
+                                                className="profile-booking-delete"
+                                                type="button"
+                                                onClick={() => handleDeleteBooking(b.id)}
+                                            >
+                                                Verwijderen
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
