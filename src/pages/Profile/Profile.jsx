@@ -39,9 +39,16 @@ export default function Profile() {
     return (
         <div className="profile">
             <header className="profile-hero">
-                <h1>Mijn profiel</h1>
+                <h1>
+                    {loadingProfile
+                        ? "Mijn profiel"
+                        : displayName
+                            ? `Hallo, ${displayName}`
+                            : "Mijn profiel"}
+                </h1>
                 <p>Beheer je gegevens en bekijk je (toekomstige) boekingen.</p>
             </header>
+
 
             <section className="profile-grid">
                 <div className="profile-card">
