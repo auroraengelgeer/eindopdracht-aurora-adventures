@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createProfile } from "../../api/profiles";
 import { createUser } from "../../api/users";
 import "./SignUp.css";
@@ -13,47 +13,42 @@ export default function SignUp() {
 
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const showInfo = Boolean(location.state?.showDemoInfo);
-
 
     async function handleSubmit(e) {
         e.preventDefault();
 
+        const normalizedEmail = email.trim().toLowerCase();
+
         try {
-            // 1) Maak éérst een echte user aan (kan daarna inloggen)
-            await createUser({
-                email,
+            const newUser = await createUser({
+                email: normalizedEmail,
                 password,
                 roles: ["user"],
             });
 
-            // 2) Sla daarna profieldata op in profiles-collectie
-            const profilePayload = {
+            await createProfile({
                 id: Date.now(),
                 firstName,
                 lastName,
-                email,
+                email: normalizedEmail,
+                userId: newUser?.id,
                 createdAt: new Date().toISOString(),
-            };
+            });
 
-            await createProfile(profilePayload);
-
-            // 3) Door naar login met succes state + email prefill
             navigate("/inloggen", {
                 replace: true,
-                state: { signupSuccess: true, email },
+                state: { signupSuccess: true, email: normalizedEmail },
             });
-        } catch (err) {
-            console.error("Signup failed:", err);
 
-            // nette, herkenbare foutmelding bij duplicaat
+        } catch (err) {
             const msg = String(err?.message || "");
-            if (msg.includes("already exists") || msg.includes("exists") || msg.includes("400")) {
-                alert("Dit e-mailadres is al geregistreerd. Log in of gebruik een ander e-mailadres.");
+
+            if (msg.includes("already exists") || msg.includes("400")) {
+                alert("Er bestaat al een account met dit e-mailadres. Log in of gebruik een ander e-mailadres.");
                 return;
             }
 
+            console.error("Signup failed:", err);
             alert("Registreren mislukt. Probeer opnieuw.");
         }
     }
