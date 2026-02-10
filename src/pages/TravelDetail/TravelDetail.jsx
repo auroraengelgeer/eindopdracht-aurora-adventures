@@ -2,6 +2,9 @@ import { Link, useParams } from "react-router-dom";
 import { useTravel } from "../../hooks/useTravel";
 import { useState } from "react";
 import "./TravelDetail.css";
+import PageState from "../../components/PageState/PageState";
+import GuestSelector from "../../components/GuestSelector/GuestSelector";
+import { formatDurationDays, formatPriceEUR } from "../../helpers/format";
 
 
 export default function TravelDetail() {
@@ -11,31 +14,32 @@ export default function TravelDetail() {
 
     if (loading) {
         return (
-            <div className="travel-detail">
-                <p>Reis laden...</p>
-            </div>
+            <PageState
+                className="travel-detail"
+                message="Reis laden..."
+            />
         );
     }
 
     if (error) {
         return (
-            <div className="travel-detail">
-                <p>{error}</p>
-                <Link to="/reizen" className="button button-secondary">
-                    Terug naar overzicht
-                </Link>
-            </div>
+            <PageState
+                className="travel-detail"
+                message={error}
+                actionTo="/reizen"
+                actionLabel="Terug naar overzicht"
+            />
         );
     }
 
     if (!travel) {
         return (
-            <div className="travel-detail">
-                <p>Reis niet gevonden.</p>
-                <Link to="/reizen" className="button button-secondary">
-                    Terug naar overzicht
-                </Link>
-            </div>
+            <PageState
+                className="travel-detail"
+                message="Reis niet gevonden."
+                actionTo="/reizen"
+                actionLabel="Terug naar overzicht"
+            />
         );
     }
 
@@ -67,7 +71,7 @@ export default function TravelDetail() {
                         <p className="travel-location">{travel.location}</p>
 
                         <div className="travel-meta">
-                            <span>{travel.durationDays} dagen</span>
+                            <span>{formatDurationDays(travel.durationDays)}</span>
                         </div>
                     </div>
 
@@ -97,32 +101,20 @@ export default function TravelDetail() {
 
                 <aside className="travel-detail-aside">
                     <div className="booking-card">
-                        <p className="booking-price">€{travel.pricePerPerson}</p>
+                        <p className="booking-price">{formatPriceEUR(travel.pricePerPerson)}</p>
                         <p className="booking-sub">per persoon</p>
 
                         <div className="booking-guests">
                             <p className="booking-guests-label">Aantal gasten</p>
-
-                            <div className="guest-row">
-                                <button
-                                    type="button"
-                                    className="guest-btn"
-                                    onClick={() => setGuests((g) => Math.max(1, g - 1))}
-                                >
-                                    -
-                                </button>
-
-                                <span className="guest-count">{guests}</span>
-
-                                <button
-                                    type="button"
-                                    className="guest-btn"
-                                    onClick={() => setGuests((g) => g + 1)}
-                                >
-                                    +
-                                </button>
-                            </div>
+                            <GuestSelector
+                                value={guests}
+                                onChange={setGuests}
+                                min={1}
+                                label=""
+                                countClassName="guest-count"
+                            />
                         </div>
+
 
                         <Link
                             className="button button-primary booking-cta"
