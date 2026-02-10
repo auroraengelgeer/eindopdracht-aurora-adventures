@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useTravels } from "../../hooks/useTravels";
+import { useTravel } from "../../hooks/useTravel";
 import { createBooking } from "../../api/bookings";
 import { isJwtToken } from "../../helpers/isJwtToken";
+import PageState from "../../components/PageState/PageState";
+import GuestSelector from "../../components/GuestSelector/GuestSelector";
+import { formatDurationDays, formatPriceEUR } from "../../helpers/format";
 import "./Booking.css";
 
 
@@ -86,42 +89,39 @@ export default function Booking() {
 
 
 
-    const { travels, loading, error } = useTravels();
+    const { travel, loading, error } = useTravel(travelId);
 
-    const travel = travels.find((t) => String(t.id) === String(travelId));
 
     if (loading) {
-        return (
-            <div className="booking">
-                <h1>Boeking afronden</h1>
-                <p>Reis laden...</p>
-            </div>
-        );
+        return <PageState className="booking" title="Boeking afronden" message="Reis laden..." />;
     }
+
 
     if (error) {
         return (
-            <div className="booking">
-                <h1>Boeking afronden</h1>
-                <p>{error}</p>
-                <Link to="/reizen" className="button button-secondary">
-                    Terug naar reizen
-                </Link>
-            </div>
+            <PageState
+                className="booking"
+                title="Boeking afronden"
+                message={error}
+                actionTo="/reizen"
+                actionLabel="Terug naar reizen"
+            />
         );
     }
 
+
     if (!travel) {
         return (
-            <div className="booking">
-                <h1>Boeking afronden</h1>
-                <p>Reis niet gevonden.</p>
-                <Link to="/reizen" className="button button-secondary">
-                    Terug naar reizen
-                </Link>
-            </div>
+            <PageState
+                className="booking"
+                title="Boeking afronden"
+                message="Reis niet gevonden."
+                actionTo="/reizen"
+                actionLabel="Terug naar reizen"
+            />
         );
     }
+
 
 
     function nextStep() {
@@ -140,9 +140,6 @@ export default function Booking() {
     const subtotal = pricePerPerson * guests;
     const total = subtotal + serviceFee;
 
-    const formatPrice = (amount) =>
-        new Intl.NumberFormat("nl-NL").format(amount);
-
 
     function generateBookingId() {
         return Date.now(); // number
@@ -153,7 +150,7 @@ export default function Booking() {
         if (!travel) return "";
 
         if (travel.category === "tour") {
-            return `${travel.durationDays} dag activiteit`;
+            return `${formatDurationDays(travel.durationDays)} activiteit`;
         }
 
         if (travel.category === "package") {
@@ -344,19 +341,8 @@ export default function Booking() {
 
                             </div>
 
-                            <div className="field">
-                                <label>Aantal gasten</label>
-                                <div className="guest-row">
-                                    <button type="button" className="guest-btn"
-                                            onClick={() => setGuests(g => Math.max(1, g - 1))}>-
-                                    </button>
-                                    <span>{guests}</span>
-                                    <button type="button" className="guest-btn"
-                                            onClick={() => setGuests(g => g + 1)}>+
-                                    </button>
+                            <GuestSelector value={guests} onChange={setGuests} min={1} />
 
-                                </div>
-                            </div>
 
                             <div className="info-box">
                                 <p><strong>Belangrijke informatie</strong></p>
@@ -505,17 +491,17 @@ export default function Booking() {
                         <p className="summary-sub">{getSummarySubtitle(travel)}</p>
 
                         <div className="summary-row">
-                            <span>€{pricePerPerson} × {guests} gasten</span>
-                            <span>€{formatPrice(subtotal)}</span>
+                            <span>{formatPriceEUR(pricePerPerson)} × {guests} gasten</span>
+                            <span>{formatPriceEUR(subtotal)}</span>
                         </div>
                         <div className="summary-row">
                             <span>Servicekosten</span>
-                            <span>€{formatPrice(serviceFee)}</span>
+                            <span>{formatPriceEUR(serviceFee)}</span>
                         </div>
 
                         <div className="summary-total">
                             <span>Totaal</span>
-                            <span>€{formatPrice(total)}</span>
+                            <span>{formatPriceEUR(total)}</span>
                         </div>
 
                         <div className="summary-safe">
