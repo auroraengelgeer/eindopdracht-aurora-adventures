@@ -7,6 +7,9 @@ import { isJwtToken } from "../../helpers/isJwtToken";
 import PageState from "../../components/PageState/PageState";
 import GuestSelector from "../../components/GuestSelector/GuestSelector";
 import { formatDurationDays, formatPriceEUR } from "../../helpers/format";
+import BookingSteps from "../../components/BookingSteps/BookingSteps";
+import FormField from "../../components/FormField/FormField";
+import BookingSummaryCard from "../../components/BookingSummaryCard/BookingSummaryCard";
 import "./Booking.css";
 
 
@@ -168,15 +171,7 @@ export default function Booking() {
                 <p className="booking-hero-sub">{travel?.title}</p>
             </header>
 
-            <div className="booking-steps">
-            <div className={`step ${step === 1 ? "step-active" : ""} ${step > 1 ? "step-done" : ""}`}>1</div>
-                <div className={`step-line ${step > 1 ? "step-line-active" : ""}`}/>
-
-                <div className={`step ${step === 2 ? "step-active" : ""} ${step > 2 ? "step-done" : ""}`}>2</div>
-                <div className={`step-line ${step > 2 ? "step-line-active" : ""}`}/>
-
-                <div className={`step ${step === 3 ? "step-active" : ""}`}>3</div>
-            </div>
+            <BookingSteps step={step} />
 
 
             <p className="booking-step-label">
@@ -212,93 +207,78 @@ export default function Booking() {
                             <h2>Contactgegevens</h2>
 
                             <div className="grid-2">
-                                <div className="field">
-                                    <label>Voornaam *</label>
+                                <FormField label="Voornaam" required>
                                     <input
                                         type="text"
                                         placeholder="Jan"
                                         value={formData.firstName}
-                                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
-                                <div className="field">
-                                    <label>Achternaam *</label>
+                                <FormField label="Achternaam" required>
                                     <input
                                         type="text"
                                         placeholder="de Vries"
                                         value={formData.lastName}
-                                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
                             </div>
 
                             <div className="grid-2">
-                                <div className="field">
-                                    <label>Email *</label>
+
+                                <FormField label="Email" required>
                                     <input
                                         type="email"
                                         placeholder="jan@voorbeeld.nl"
                                         value={formData.email}
-                                        onChange={(e) =>
-                                            setFormData({...formData, email: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
-                                <div className="field">
-                                    <label>Telefoon</label>
+                                <FormField label="Telefoon" required>
                                     <input
                                         type="tel"
                                         placeholder="+31 6 12345678"
                                         value={formData.phone}
-                                        required
-                                        onChange={(e) =>
-                                            setFormData({...formData, phone: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     />
-                                </div>
+                                </FormField>
+
                             </div>
 
-                            <div className="field">
-                                <label>Adres *</label>
+                            <FormField label="Adres" required>
                                 <input
                                     type="text"
                                     placeholder="Straatnaam 123"
                                     value={formData.address}
-                                    onChange={(e) =>
-                                        setFormData({...formData, address: e.target.value})
-                                    }
+                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                 />
+                            </FormField>
 
-                            </div>
 
                             <div className="grid-2">
-                                <div className="field">
-                                    <label>Stad *</label>
+
+                                <FormField label="Stad" required>
                                     <input
                                         type="text"
                                         placeholder="Amsterdam"
                                         value={formData.city}
-                                        onChange={(e) =>
-                                            setFormData({...formData, city: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
-                                <div className="field">
-                                    <label>Postcode *</label>
+                                <FormField label="Postcode" required>
                                     <input
                                         type="text"
                                         placeholder="1234 AB"
                                         value={formData.postalCode}
-                                        onChange={(e) =>
-                                            setFormData({...formData, postalCode: e.target.value})
-                                        }
+                                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
                                     />
+                                </FormField>
 
-                                </div>
                             </div>
 
                             {submitError && (
@@ -331,15 +311,14 @@ export default function Booking() {
                         <>
                             <h2>Reisdetails</h2>
 
-                            <div className="field">
-                                <label>Startdatum *</label>
+                            <FormField label="Startdatum" required>
                                 <input
                                     type="date"
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                 />
+                            </FormField>
 
-                            </div>
 
                             <GuestSelector value={guests} onChange={setGuests} min={1} />
 
@@ -485,33 +464,16 @@ export default function Booking() {
                         )}
                 </div>
 
-                    <aside className="booking-summary-card">
-                        <div className="summary-image" aria-label="Reis afbeelding"/>
-                        <h3>{travel?.title}</h3>
-                        <p className="summary-sub">{getSummarySubtitle(travel)}</p>
+                    <BookingSummaryCard
+                        travel={travel}
+                        subtitle={getSummarySubtitle(travel)}
+                        guests={guests}
+                        pricePerPerson={pricePerPerson}
+                        subtotal={subtotal}
+                        serviceFee={serviceFee}
+                        total={total}
+                    />
 
-                        <div className="summary-row">
-                            <span>{formatPriceEUR(pricePerPerson)} × {guests} gasten</span>
-                            <span>{formatPriceEUR(subtotal)}</span>
-                        </div>
-                        <div className="summary-row">
-                            <span>Servicekosten</span>
-                            <span>{formatPriceEUR(serviceFee)}</span>
-                        </div>
-
-                        <div className="summary-total">
-                            <span>Totaal</span>
-                            <span>{formatPriceEUR(total)}</span>
-                        </div>
-
-                        <div className="summary-safe">
-                            <span>✓</span>
-                            <p>
-                                <strong>Veilig betalen</strong><br/>
-                                Je gegevens zijn beschermd
-                            </p>
-                        </div>
-                    </aside>
                 </section>
             )}
         </div>
