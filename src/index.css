@@ -22,9 +22,14 @@ body {
   color: var(--color-black);
 }
 
-html, body {
-  height: 100%;
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-
+.app-main {
+  flex: 1;
+}
 
