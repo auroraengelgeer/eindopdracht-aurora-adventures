@@ -32,20 +32,25 @@ export default function Profile() {
             return db - da; // nieuwste bovenaan
         });
 
-    const displayName = profile
-        ? `${profile.firstName ?? ""} ${profile.lastName ?? ""}`.trim()
-        : "";
+    const firstName = (profile?.firstName || "").trim();
+    const fullName = profile ? `${profile.firstName ?? ""} ${profile.lastName ?? ""}`.trim() : "";
+
 
     return (
         <div className="profile">
             <header className="profile-hero">
-                <h1>
-                    {loadingProfile
-                        ? "Mijn profiel"
-                        : displayName
-                            ? `Hallo, ${displayName}`
-                            : "Mijn profiel"}
+                <h1 className="profile-greeting">
+                    {loadingProfile ? (
+                        "Mijn profiel"
+                    ) : firstName ? (
+                        <>
+                            Hallo, <span className="profile-greeting-name">{firstName}</span>
+                        </>
+                    ) : (
+                        "Mijn profiel"
+                    )}
                 </h1>
+
                 <p>Beheer je gegevens en bekijk je (toekomstige) boekingen.</p>
             </header>
 
@@ -57,7 +62,7 @@ export default function Profile() {
                     <div className="profile-row">
                         <span>Naam</span>
                         <span>
-                            {loadingProfile ? "Laden..." : displayName || "—"}
+                            {loadingProfile ? "Laden..." : fullName || "—"}
                         </span>
                     </div>
 

@@ -106,3 +106,7 @@
 .profile-booking-delete:hover {
     color: var(--color-black);
 }
+
+.profile-greeting-name {
+    color: var(--color-orange-dark);
+}
