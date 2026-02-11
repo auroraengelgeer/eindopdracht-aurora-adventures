@@ -67,12 +67,6 @@ export default function Profile() {
                     </div>
 
                     {profileError ? <StatusMessage>{profileError}</StatusMessage> : null}
-
-                    <div className="profile-actions">
-                        <button className="button button-secondary" type="button" disabled>
-                            Gegevens wijzigen (later)
-                        </button>
-                    </div>
                 </div>
 
                 <div className="profile-card">
