@@ -39,8 +39,8 @@ De applicatie draait lokaal met Node.js en npm en kan worden gestart met `npm ru
 Voor correcte werking maakt de applicatie gebruik van een `.env` bestand in de root van het project met de volgende variabelen:
 
 ```env
-VITE_API_BASE_URL=https://novi-backend-api-wgsgz.ondigitalocean.app
-VITE_NOVI_PROJECT_ID=
+VITE_API_BASE_URL= vul hier de base url in de aangeleverd is in het .txt bestand
+VITE_NOVI_PROJECT_ID= vul hier de project id in die is aangeleverd in het .txt bestand
 ```
 
 ## Inloggegevens
