@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { formatDateNL, formatPriceEUR } from "../../helpers/format";
 import StatusMessage from "../../components/StatusMessage/StatusMessage";
@@ -7,22 +7,28 @@ import { useMyProfile } from "../../hooks/useMyProfile";
 import "./Profile.css";
 
 export default function Profile() {
+
+    const navigate = useNavigate();
+
     const { user, token } = useAuth();
 
     const { myBookings, loading, error, removeBooking } = useMyBookings(user?.email, token);
     const { profile, loadingProfile, profileError } = useMyProfile(user?.email, token);
 
-    async function handleDeleteBooking(id) {
+    async function handleDeleteBooking(e, id) {
+        e.stopPropagation();
+
         const confirmDelete = window.confirm("Weet je zeker dat je deze boeking wilt verwijderen?");
         if (!confirmDelete) return;
 
         try {
             await removeBooking(id);
-        } catch (e) {
-            console.error("Boeking verwijderen mislukt:", e);
+        } catch (err) {
+            console.error("Boeking verwijderen mislukt:", err);
             alert("Verwijderen mislukt. Probeer opnieuw.");
         }
     }
+
 
     const sortedBookings = myBookings
         .slice()
@@ -92,7 +98,19 @@ export default function Profile() {
                     {!loading && !error && sortedBookings.length > 0 ? (
                         <div className="profile-bookings">
                             {sortedBookings.map((b) => (
-                                <div className="profile-booking" key={b.id}>
+                                <div
+                                    className="profile-booking profile-booking--clickable"
+                                    key={b.id}
+                                    role="button"
+                                    tabIndex={0}
+                                    onClick={() => {
+                                        if (b.travelId) navigate(`/reizen/${b.travelId}`);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" && b.travelId) navigate(`/reizen/${b.travelId}`);
+                                    }}
+                                >
+
                                     <div>
                                         <p className="profile-booking-title">{b.travelTitle}</p>
                                         <p className="profile-booking-meta">
@@ -109,7 +127,7 @@ export default function Profile() {
                                         <button
                                             className="profile-booking-delete"
                                             type="button"
-                                            onClick={() => handleDeleteBooking(b.id)}
+                                            onClick={(e) => handleDeleteBooking(e, b.id)}
                                         >
                                             Verwijderen
                                         </button>
