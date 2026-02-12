@@ -110,3 +110,8 @@
 .profile-greeting-name {
     color: var(--color-orange-dark);
 }
+
+.profile-booking--clickable {
+    cursor: pointer;
+}
+
